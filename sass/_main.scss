@@ -1,0 +1,26 @@
+.main {
+
+    svg{
+        font-size: 0.80rem;
+    }
+
+    .table th, .table td{
+        font-size: 0.80rem !important;
+    }
+
+}
+
+table.dataTable thead th,
+table.dataTable thead td {
+    border: none;
+}
+
+.table.dataTable thead{
+    border: none;
+    color: #fff;
+    background: -webkit-linear-gradient(#00c6ff, #0072ff);
+    background: -moz-linear-gradient(#00c6ff, #0072ff);
+    background: -ms-linear-gradient(#00c6ff, #0072ff);
+    background: -o-linear-gradient(#00c6ff, #0072ff);
+    background: linear-gradient(#00c6ff, #0072ff);
+}
