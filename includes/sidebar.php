@@ -26,6 +26,7 @@
                         <a class="nav-link" href="#"><i class="fas fa-users icon"></i><span class="link-text">User Management&nbsp;&nbsp;<i class="fas fa-caret-down"></i></span></a>
                     </li>
                     </li>
+                    <!--
                     <li class="nav-item">
                         <a class="nav-link" href="#">&nbsp;<i class="fas fa-clipboard-list icon"></i><span class="link-text">&nbsp;&nbsp;&nbsp;Report Management&nbsp;&nbsp;<i class="fas fa-caret-down"></i></span></a>
                     </li>
@@ -33,8 +34,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="fas fa-user-cog icon"></i><span class="link-text">Settings&nbsp;&nbsp;<i class="fas fa-caret-down"></i></span></a>
                     </li>
+                    -->
                     <li class="nav-item">
-                        <a class="nav-link" href="../login_form.php"><i class="fas fa-sign-out-alt icon"></i><span class="link-text">Logout</span></a>
+                        <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt icon"></i><span class="link-text">Logout</span></a>
                     </li>
                 </ul>
             </nav>

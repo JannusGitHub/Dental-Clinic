@@ -15,7 +15,7 @@ if(isset($_POST['submit'])){
     $errorNumber = false;
     $errorUsername = false;
     $errorPassword = false;
-    $numberValidation = "((^(\+)(\d){12}$)|(^\d{11}$))";
+    $numberValidation = "((^(\+)(\d){12}$)|(^\d{11}$))"; //contact number regular expression patter
 
     if(empty($fullname) || empty($userRole) || empty($username) || empty($password) || empty($birthday) || empty($age) || empty($mobileNumber) || empty($fullAddress)){
         echo "<span class='form-error'>Please fill required fields</span>";
@@ -25,27 +25,25 @@ if(isset($_POST['submit'])){
         $errorNumber = true;
     }
     else{
+        $sql = "SELECT * FROM user_table WHERE username = '$username'";
+        $result = $connection->query($sql);
 
-        //Validate username
-            $sql = "SELECT id FROM user_table WHERE username = '$username'";
-            $result = $connection->query($sql);
-
-            if($result->num_rows == 1){
-                echo "This username is already taken.";
-                $errorUsername = true;
-            } else{
-                $username = trim($_POST["username"]);
-            }
-
-        // Validate password
-        if(strlen(trim($_POST["password"])) < 8){
-            echo "Password must have atleast 8 characters.";
+        //validate username
+        if($result->num_rows == 1){
+            echo "<span class='form-error'>This username is already taken</span>";
+            $errorUsername = true;
+        //validate password
+        } elseif(strlen(trim($_POST["password"])) < 8){
+            echo "<span class='form-error'>Password must have atleast 8 characters</span>";
             $errorPassword = true;
-        } else{
-            $password = trim($_POST["password"]);
+        }else{
+            $query = "INSERT INTO user_table (full_name, user_role, username, password, birthday, age, mobile_number, full_address) VALUES ('". ucwords($fullname) ."', '$userRole', '$username', '" .md5($password). "', '$birthday', '$age', '$mobileNumber', '$fullAddress')";
+
+            $result = $connection->query($query);
+            echo "<span class='form-success'>Registered Successfully</span>";
         }
 
-        echo "<span class='form-success'>Registered Successfully</span>";
+        
     }
 }else{
     echo "<span class='form-error'>Ooops! There was an error!</span>";
@@ -58,6 +56,8 @@ if(isset($_POST['submit'])){
 
     var errorEmpty = "<?php echo $errorEmpty; ?>";
     var errorNumber = "<?php echo $errorNumber; ?>";
+    var errorUsername = "<?php echo $errorUsername; ?>";
+    var errorPassword = "<?php echo $errorPassword; ?>";
 
     if(errorEmpty == true){
         $("#full-name, #user-role, #username, #password, #birthday, #age, #mobile-number, #full-address").addClass("input-error");
@@ -66,8 +66,14 @@ if(isset($_POST['submit'])){
     if(errorNumber == true){
         $('#mobile-number').addClass('input-error');
     }
+    if(errorUsername == true){
+        $('#username').addClass('input-error');
+    }
+    if(errorPassword == true){
+        $('#password').addClass('input-error');
+    }
 
-    if(errorEmpty == false && errorNumber == false){
+    if(errorEmpty == false && errorNumber == false && errorUsername == false && errorPassword == false){
         $('#full-name, #user-role, #username, #password, #birthday, #age, #mobile-number, #full-address').val("");
     }
 </script>

@@ -1,39 +1,5 @@
 <?php
 require('./admin/connection.php');
-// Define variables and initialize with empty values
-// $username = "";
-// $password = "";
-// $confirm_password = "";
-
-// $username_err = "";
-// $password_err = "";
-// $confirm_password_err = "";
-
-// // Processing form data when form is submitted
-// if($_SERVER["REQUEST_METHOD"] == "POST"){
-//     // Validate username
-//     if(empty(trim($_POST["username"]))){
-//         $username_err = "Please enter a username.";
-//     } else{
-//         $sql = "SELECT id FROM user_table WHERE username = '$username'";
-//         $result = $connection->query($sql);
-//             if($result->num_rows == 1){
-//                 $username_err = "This username is already taken.";
-//             } else{
-//                 $username = trim($_POST["username"]);
-//             }
-//     }
-
-
-//     // Validate password
-//     if(empty(trim($_POST["password"]))){
-//         $password_err = "Please enter a password.";     
-//     } elseif(strlen(trim($_POST["password"])) < 8){
-//         $password_err = "Password must have atleast 8 characters.";
-//     } else{
-//         $password = trim($_POST["password"]);
-//     }
-// }
 ?>
 
 <!DOCTYPE html>
@@ -65,8 +31,8 @@ require('./admin/connection.php');
                 <div class="col">
                     <div class="form-group">
                         <select  id="user-role" class="form-control" name="user-role"">
-                            <option value="Admin">Admin</option>
-                            <option value="Doctor">Doctor</option>
+                            <option value="admin">Admin</option>
+                            <option value="dentist">Dentist</option>
                         </select>
                     </div>
                 </div>
@@ -80,13 +46,13 @@ require('./admin/connection.php');
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <input type="text" id="password" class="form-control" name="password" placeholder="Password">
+                        <input type="password" id="password" class="form-control" name="password" placeholder="Password">
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <input type="text" id="birthday" class="form-control" name="birthday" placeholder="Birthday">
+                <input type="date" id="birthday" class="form-control" name="birthday" placeholder="Birthday">
             </div>
             <div class="form-group">
                 <input type="text" id="age" class="form-control" name="age" placeholder="Age">
@@ -98,8 +64,9 @@ require('./admin/connection.php');
             <div class="form-group">
                 <input type="text" id="full-address" class="form-control" name="full-address" placeholder="Full Address">
             </div>
-            <div class="form-group">
-                <button type="submit" id="submit" name="submit" class="btn button btn-lg btn-block">Register</button>
+            <div class="form-group d-flex align-items-center">
+                <button type="submit" id="submit" name="submit" class="btn button btn-md mr-auto">Register</button>
+                <a href="login_form.php">Click here to login</a>
             </div>
         </form>
     </div>
@@ -109,16 +76,16 @@ require('./admin/connection.php');
 <style>
     body {
         height: 100vh;
-        width: 100vw;
+        width: 100%;
         background: linear-gradient(#00c6ff, #0072ff);
-        overflow: hidden;
+        
     }
     .icon{
         font-size:60px;
-        background: -webkit-linear-gradient(#00c6ff, #0072ff);
+        /* background: -webkit-linear-gradient(#00c6ff, #0072ff);
         background: -webkit-linear-gradient(#00c6ff, #0072ff);
         -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        -webkit-text-fill-color: transparent; */
         display: initial;
     }
 
@@ -126,7 +93,6 @@ require('./admin/connection.php');
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 10px;
     }
 
     form{
@@ -134,11 +100,11 @@ require('./admin/connection.php');
         background: #fff;
         padding: 20px;
         border-radius: 10px;
+        margin-top: 20px;
     }
 
     .button{
-        width: 50%;
-        margin: 0 auto;
+        width: 40%;
     }
 
 

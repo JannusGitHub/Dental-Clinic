@@ -244,4 +244,14 @@ table.dataTable thead td {
   background: -webkit-gradient(linear, left top, left bottom, from(#00c6ff), to(#0072ff));
   background: linear-gradient(#00c6ff, #0072ff);
 }
+
+table.dataTable tbody td {
+  padding: 2px 10px;
+}
+
+.table td, .table th {
+  padding: .75rem;
+  vertical-align: middle;
+  border-top: 1px solid #dee2e6;
+}
 /*# sourceMappingURL=style.css.map */
