@@ -1,4 +1,5 @@
 <?php
+    include('../includes/auth_session.php');
     include('../includes/header.php');
         
         //pass this value to sidebar.php .nav-item to active the class and highlight
@@ -77,7 +78,7 @@
                         <th>Password</th>
                         <th>Birthday</th>
                         <th>Age</th>
-                        <th>Mobile #</th>
+                        <th>Mobile Number</th>
                         <th>Address</th>
                         <th>Gender</th>
                         <th>Nickname</th>

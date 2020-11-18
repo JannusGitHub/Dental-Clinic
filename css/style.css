@@ -225,14 +225,33 @@ main h1 {
   }
 }
 
+/***************main tag Style***************/
 .main svg {
   font-size: 0.80rem;
 }
 
 .main .table th, .main .table td {
   font-size: 0.80rem !important;
+  text-align: center;
 }
 
+select {
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da !important;
+  border-radius: .25rem;
+  -webkit-transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+  transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+}
+
+/***************DataTable Styles***************/
 table.dataTable thead th,
 table.dataTable thead td {
   border: none;
@@ -246,12 +265,17 @@ table.dataTable thead td {
 }
 
 table.dataTable tbody td {
-  padding: 2px 10px;
+  padding: 2px 5px 2px 0px;
 }
 
 .table td, .table th {
   padding: .75rem;
   vertical-align: middle;
   border-top: 1px solid #dee2e6;
+}
+
+#patientAppointmentTable {
+  font-size: 0.80rem !important;
+  text-align: center;
 }
 /*# sourceMappingURL=style.css.map */

@@ -33,7 +33,7 @@ require('./admin/connection.php');
                 <button type="submit" id="submit" class="btn btn-primary btn-lg btn-block">Sign In</button>
             </div>
             <div class="text-center">
-                <p class="text-white">Don't have an account? <a class="text-white" href="register.php">Click here!</a></p>
+                <p class="text-white">Don't have an account? <a class="text-white" href="registration.php">Click here!</a></p>
             </div>
         </form>
             

@@ -1,11 +1,12 @@
 <?php 
     session_start();
-    // Destroy session
-    
-    if(session_destroy()){
-        session_unset();
-        
-        header('location: login_form.php');
-    }
 
+    //set status to invalid
+    $_SESSION['status'] = 'invalid';
+    // Destroy session
+
+    unset($_SESSION['username']);
+
+    //redirect to login form
+    header('location: login_form.php');
 ?>

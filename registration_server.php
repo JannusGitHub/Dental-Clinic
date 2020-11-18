@@ -15,7 +15,7 @@ if(isset($_POST['submit'])){
     $errorNumber = false;
     $errorUsername = false;
     $errorPassword = false;
-    $numberValidation = "((^(\+)(\d){12}$)|(^\d{11}$))"; //contact number regular expression patter
+    $numberValidation = "((^(\+)(\d){12}$)|(^\d{11}$))"; //mobile number regular expression pattern
 
     if(empty($fullname) || empty($userRole) || empty($username) || empty($password) || empty($birthday) || empty($age) || empty($mobileNumber) || empty($fullAddress)){
         echo "<span class='form-error'>Please fill required fields</span>";

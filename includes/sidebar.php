@@ -6,8 +6,8 @@
                         <a class="nav-link" href="../admin/index.php">&nbsp;<i class="fas fa-tachometer-alt icon"></i><span class="link-text">Dashboard</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">&nbsp;<i class="fas fa-user icon"></i><span class="link-text">&nbsp;&nbsp;Patient Management&nbsp;&nbsp;<i class="fas fa-caret-down"></i></span></a>
-                        <div class="collapse" id="collapseExample">
+                        <a class="nav-link" data-toggle="collapse" href="#collapsePatient" role="button" aria-expanded="false" aria-controls="collapseExample">&nbsp;<i class="fas fa-user icon"></i><span class="link-text">&nbsp;&nbsp;Patient Management&nbsp;&nbsp;<i class="fas fa-caret-down"></i></span></a>
+                        <div class="collapse" id="collapsePatient">
                             <div class="card card-body">
                                 <a class="<?php if($page =='patient'){echo 'active';} ?>" href="../admin/patient.php">Add New Patient</a>
                                 <a class="<?php if($page =='patient_prescription'){echo 'active';} ?>" href="#">Add Patient Prescription</a>
@@ -20,7 +20,12 @@
                         <a class="nav-link" href="#">&nbsp;<i class="fas fa-user-md icon"></i><span class="link-text">&nbsp;&nbsp;Doctor Management&nbsp;&nbsp;<i class="fas fa-caret-down"></i></span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-home icon"></i><span class="link-text">Appointment Management&nbsp;&nbsp;<i class="fas fa-caret-down"></i></span></a>
+                        <a class="nav-link" data-toggle="collapse" href="#collapseAppointment" role="button" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-home icon"></i><span class="link-text">Appointment Management&nbsp;&nbsp;<i class="fas fa-caret-down"></i></span></a>
+                        <div class="collapse" id="collapseAppointment">
+                            <div class="card card-body">
+                                <a class="<?php if($page =='patient_appointment'){echo 'active';} ?>" href="../admin/patient_appointment.php">Add New Appointment</a>                               
+                            </div>
+                        </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="fas fa-users icon"></i><span class="link-text">User Management&nbsp;&nbsp;<i class="fas fa-caret-down"></i></span></a>
