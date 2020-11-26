@@ -11,7 +11,7 @@ if(isset($_POST['key'])){
         $rowID = $connection->real_escape_string($_POST['rowID']);
         if($rowID !== ''){
             $query = $connection->query("SELECT user_table.full_name, appointment_table.appointment_date, appointment_table.timeslot,
-            appointment_table.patient_name, patient_table.mobile_number, appointment_table.status 
+            patient_table.nickname, appointment_table.patient_mobile_number, appointment_table.status 
             FROM appointment_table, user_table, patient_table WHERE user_table.id = appointment_table.user_id AND patient_table.id = appointment_table.patient_id AND appointment_table.id = '$rowID'");
 
             $result = $query->fetch_array();
@@ -19,8 +19,8 @@ if(isset($_POST['key'])){
                 'fullName' => $result['full_name'],
                 'appointmentDate' => $result['appointment_date'],
                 'timeslot' => $result['timeslot'],
-                'patientName' => $result['patient_name'],
-                'mobileNumber' => $result['mobile_number'],
+                'patientName' => $result['nickname'],
+                'mobileNumber' => $result['patient_mobile_number'],
                 'status' => $result['status']
             );
     
@@ -34,7 +34,7 @@ if(isset($_POST['key'])){
     if($_POST['key'] == 'viewData'){
 
         $result = $connection->query("SELECT appointment_table.id, user_table.full_name, appointment_table.appointment_date, appointment_table.timeslot, 
-		appointment_table.patient_name, appointment_table.patient_mobile_number, appointment_table.status 
+		patient_table.nickname, appointment_table.patient_mobile_number, appointment_table.status 
 		FROM appointment_table, user_table, patient_table WHERE user_table.id = appointment_table.user_id AND patient_table.id = appointment_table.patient_id 
 		ORDER BY appointment_table.id DESC");
         if ($result->num_rows > 0){
@@ -51,7 +51,7 @@ if(isset($_POST['key'])){
                         <td id="full_name'.$row["id"].'">'.$row["full_name"].'</td>
                         <td>'.$row["appointment_date"].'</td>
                         <td>'.$row["timeslot"].'</td>
-                        <td>'.$row["patient_name"].'</td>
+                        <td>'.$row["nickname"].'</td>
                         <td>'.$row["patient_mobile_number"].'</td>
                         <td>'.$row["status"].'</td>
                     </tr>

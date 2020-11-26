@@ -8,5 +8,5 @@
     unset($_SESSION['username']);
 
     //redirect to login form
-    header('location: login.php');
+    header('location: patient_login.php');
 ?>

@@ -21,7 +21,7 @@ require('./admin/connection.php');
     <div class="login-form">
         <form id="loginForm" action="login_server.php" method="POST">
             <div class="text-center"><i class="fas fa-users icon"></i></div>
-            <h2 class="text-center">Login</h2>
+            <h2 class="text-center">User Login</h2>
             <p class="form-message text-center"></p>
             <div class="form-group">
                 <input type="text" id="username" class="form-control" name="username" placeholder="Username">

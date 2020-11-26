@@ -95,7 +95,7 @@ if(isset($_POST['key'])){
         if(isNotEmpty($username) && isNotEmpty($password) && isNotEmpty($birthday)
         && isNotEmpty($age) && isNotEmpty($mobileNumber) && isNotEmpty($fullAddress) 
         && isNotEmpty($gender) && isNotEmpty($nickname) && isNotEmpty($occupation)){
-            $query = "INSERT INTO patient_table (username, password, birthday, age, mobile_number, full_address, gender, nickname, occupation) VALUES ('$username', '$password', '$birthday', '$age', '$mobileNumber', '$fullAddress', '$gender', '$nickname', '$occupation')";
+            $query = "INSERT INTO patient_table (username, password, birthday, age, mobile_number, full_address, gender, nickname, occupation) VALUES ('$username', '" . md5($password) . "', '$birthday', '$age', '$mobileNumber', '$fullAddress', '$gender', '$nickname', '$occupation')";
             $result = $connection->query($query);
             if ($result) {
                 exit('Successfully Inserted');
@@ -124,7 +124,7 @@ if(isset($_POST['key'])){
         if(isNotEmpty($username) && isNotEmpty($password) && isNotEmpty($birthday)
         && isNotEmpty($age) && isNotEmpty($mobileNumber) && isNotEmpty($fullAddress) 
         && isNotEmpty($gender) && isNotEmpty($nickname) && isNotEmpty($occupation)){
-            $connection->query("UPDATE patient_table SET username ='$username', password ='$password', birthday ='$birthday', age ='$age', mobile_number ='$mobileNumber', full_address ='$fullAddress', gender ='$gender', nickname ='$nickname', occupation ='$occupation' WHERE id='$rowID'");
+            $connection->query("UPDATE patient_table SET username ='$username', password ='" . md5($password) . "', birthday ='$birthday', age ='$age', mobile_number ='$mobileNumber', full_address ='$fullAddress', gender ='$gender', nickname ='$nickname', occupation ='$occupation' WHERE id='$rowID'");
                 exit('Successfully Updated');
         }
     }

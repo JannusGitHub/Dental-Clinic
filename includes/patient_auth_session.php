@@ -8,6 +8,6 @@
         // he is trying to access this page unauthorized
         unset($_SESSION['username']);
 
-        header("Location: ../login.php");
+        header("Location: ./patient_login.php");
     } 
 ?>

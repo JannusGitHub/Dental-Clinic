@@ -74,7 +74,7 @@
                     </div>
                     <div class="modal-footer">
                         <input type="submit" name="saveBtn" class="btn button saveBtn" id="manageBtn" onclick="manageData('addNew')" value="Save">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" name="closeBtn" id="closeBtn" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                     </form> <!-- This solves my problem -->
                 </div>
@@ -102,6 +102,7 @@
             </table>
         </div>
         <!-- Table ends -->
+
     </main>
 
     <!--Include the script first, before using any jquery script-->
@@ -127,6 +128,9 @@
 
             //reset the fields value
             $("#patientAppointmentForm").trigger("reset");
+
+            //remove disabled when add appointment button is clicked
+            $('#patient-name').attr('disabled', false);
 
             //change the modal-header BG, modal-title text color, modal-title text & show modal
             $(".modal-header").css( "background", "linear-gradient(#00c6ff, #0072ff)");
@@ -155,7 +159,7 @@
     }
 
 
-        //Solves my problem using setTimeout <3
+    //Solves my problem using setTimeout <3
     //cancel the default submission of the form & execute the viewData() function to reload data asynchronously
     $('#patientAppointmentForm').on('submit', function(event){
         event.preventDefault();
@@ -177,20 +181,28 @@
 
             return false;
 
-        } else
+        } else{
             caller.css('border', '');
+            return true;
+        }
 
-        return true;
     }
     function isNotDate(caller) {
         if (Date.parse(caller) == '') {
             caller.css('border', '1px solid red');
-            return false;
-        } else
-        
-            caller.css('border', '');
+            alert("Please fill all the required fields");
+            
+            $('#patientAppointmentForm').on('submit', function(event){
+                event.preventDefault();
+            });
 
-        return true;
+            return false;
+        } else{
+            caller.css('border', '');
+            return true;
+        }
+        
+
     }
     //==============================INSERT DATA==============================
     function manageData(key){
@@ -237,7 +249,9 @@
     //==============================UPDATE DATA==============================
     //UPDATE/getRowData and change the saveBtn onclick to manageData('updateRow')
     function edit(rowID){
-        $('#patientAppointmentModal').modal('show');
+        //remove disabled when add appointment button is clicked
+        $('#patient-name').attr('disabled', true);
+
         $.ajax({
             method: 'POST',
             url: 'appointment_server.php',
@@ -261,13 +275,17 @@
                 $(".modal-title").css( "color", "white" );
                 $(".modal-title").text("Edit Appointment");
                 $('.saveBtn').val('Update').attr('onclick', "manageData('updateRow')");
+                $('#patientAppointmentModal').modal('show');
 
-                //after the update submission, close the modal
-                $('.saveBtn').attr("onclick", "manageData('updateRow')").on('click', function(){
-                    setTimeout(() => {
-                        $('#patientAppointmentModal').modal('hide');
-                    }, 400);
-                });
+                if(data == 'Successfully Updated'){
+                    $('.saveBtn').attr("onclick", "manageData('updateRow')").on('click', function(){
+                            $("#patientAppointmentModal").modal('hide');
+                    });
+                }
+
+                
+
+
             }
         });
         

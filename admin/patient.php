@@ -37,7 +37,7 @@
                                 <input type="password" class="form-control" id="password" placeholder="Enter password">                    
                             </div>
                             <div class="form-group">                                
-                                <input type="text" class="form-control" id="birthday" placeholder="Enter birthday">                    
+                                <input type="date" class="form-control" id="birthday" placeholder="Enter birthday">                    
                             </div>
                             <div class="form-group">                                
                                 <input type="text" class="form-control" id="age" placeholder="Enter age">                    
@@ -78,7 +78,7 @@
                         <th>Password</th>
                         <th>Birthday</th>
                         <th>Age</th>
-                        <th>Mobile Number</th>
+                        <th>Number</th>
                         <th>Address</th>
                         <th>Gender</th>
                         <th>Nickname</th>
@@ -224,7 +224,6 @@
                         $("#patientModal").modal('hide');
                         viewData();
                     }
-
                 }
             });
         }

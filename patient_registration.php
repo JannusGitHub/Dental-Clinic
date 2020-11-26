@@ -18,25 +18,10 @@ require('./admin/connection.php');
 <body>
 
     <div class="login-form">
-        <form id="registerForm" action="registration_server.php" method="POST">
+        <form id="patientRegistrationForm" action="patient_registration_server.php" method="POST">
             <div class="text-center"><i class="fas fa-users icon"></i></div>
             <h5 class="text-center">Create your account</h5>
             <p class="form-message text-center"></p>
-            <div class="row">
-                <div class="col">
-                    <div class="form-group">
-                        <input type="text" id="full-name" class="form-control" name="full-name" placeholder="Full Name" autocomplete="off">
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        <select  id="user-role" class="form-control" name="user-role">
-                            <option value="admin">Admin</option>
-                            <option value="dentist">Dentist</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
 
             <div class="row">
                 <div class="col">
@@ -51,22 +36,38 @@ require('./admin/connection.php');
                 </div>
             </div>
 
-            <div class="form-group">
-                <input type="date" id="birthday" class="form-control" name="birthday" placeholder="Birthday" autocomplete="off">
-            </div>
-            <div class="form-group">
-                <input type="number" id="age" class="form-control" name="age" placeholder="Age" autocomplete="off">
-            </div>
-            <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <input type="date" id="birthday" class="form-control" name="birthday" placeholder="Birthday" autocomplete="off">
+                    </div>
+                </div>
 
+                <div class="col">
+                    <div class="form-group">
+                        <input type="number" id="age" class="form-control" name="age" placeholder="Age" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <input type="text" id="mobile-number" class="form-control" name="mobile-number" placeholder="Mobile #" autocomplete="off">
             </div>
             <div class="form-group">
                 <input type="text" id="full-address" class="form-control" name="full-address" placeholder="Full Address" autocomplete="off">
             </div>
+            <div class="form-group">
+                <input type="text" id="gender" class="form-control" name="gender" placeholder="Gender" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <input type="text" id="nickname" class="form-control" name="nickname" placeholder="Nickname" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <input type="text" id="occupation" class="form-control" name="occupation" placeholder="Occupation" autocomplete="off">
+            </div>
             <div class="form-group d-flex align-items-center">
                 <button type="submit" id="submit" name="submit" class="btn button btn-md mr-auto">Register</button>
-                <a href="login.php">Click here to login</a>
+                <a href="patient_login.php">Click here to login</a>
             </div>
         </form>
     </div>
@@ -78,7 +79,8 @@ require('./admin/connection.php');
         height: 100vh;
         width: 100%;
         background: linear-gradient(#00c6ff, #0072ff);
-        
+        background: -webkit-linear-gradient(#00c6ff, #0072ff);
+        background-repeat: no-repeat;
     }
     .icon{
         font-size:60px;
@@ -136,26 +138,35 @@ require('./admin/connection.php');
     
     <script>
         $(document).ready(function(){
-            $('#registerForm').submit(function(event){
+            // $('#birthday').on('change', function(){
+            //     var today = new Date();
+            //     var age = $(this).val() - today;
+            //     console.log(age);
+            // })
+            
+
+            $('#patientRegistrationForm').submit(function(event){
                 event.preventDefault();
-                var fullname = $('#full-name').val();
-                var userRole = $('#user-role').val();
                 var username = $('#username').val();
                 var password = $('#password').val();
                 var birthday = $('#birthday').val();
                 var age = $('#age').val();
                 var mobileNumber = $('#mobile-number').val();
                 var fullAddress = $('#full-address').val();
+                var gender = $('#gender').val();
+                var nickname = $('#nickname').val();
+                var occupation = $('#occupation').val();
                 var submit = $('#submit').val();
-                $('.form-message').load('registration_server.php', {
-                    fullname: fullname,
-                    userRole: userRole,
+                $('.form-message').load('patient_registration_server.php', {
                     username: username,
                     password: password,
                     birthday: birthday,
                     age: age,
                     mobileNumber: mobileNumber, 
                     fullAddress: fullAddress,
+                    gender: gender,
+                    nickname: nickname,
+                    occupation: occupation,
                     submit: submit
                 });
             });

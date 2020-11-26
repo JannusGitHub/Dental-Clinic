@@ -25,20 +25,16 @@
             if($connection->connect_error){
                 die("Failed to connect : " .$connection->connect_error);
             }else{
-                $query = "SELECT * FROM user_table WHERE username = '$username' AND password='" . md5($password) . "'";
+                $query = "SELECT * FROM patient_table WHERE username = '$username' AND password='" . md5($password) . "'";
                 $result = $connection->query($query);
                 if($result->num_rows > 0){
                     while ($row = $result->fetch_assoc()) {
-                        if($row['user_role'] == 'admin'){
                             $_SESSION['status'] = 'valid';
                             $_SESSION['username'] = $row['username'];
-                            
-                            // $userRole = $row['user_role'];
-                            //echo ("<script>alert('$userRole');</script>");
-                            echo ("<script>window.location.href='/Dental-Clinic/admin/index.php'</script>");
-                        }else{
-                            $_SESSION['status'] = 'invalid';
-                        }
+
+                            //change this alert to login into patient dashboard
+                            // echo ("<script>alert('Success!');</script>");
+                            echo ("<script>window.location.href='/Dental-Clinic/patient_dashboard.php'</script>");
                     }
                 }else{
                     echo "<span class='form-error'>Invalid Username or Password</span>";
