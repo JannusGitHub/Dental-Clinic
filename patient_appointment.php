@@ -1,6 +1,84 @@
 <?php 
     require('./admin/connection.php');
     require('./includes/patient_auth_session.php');
+
+    //fetch data from the database of user table and pass the value inside the select tag, where user_role is dentist
+    $dentistQuery = "SELECT * FROM user_table WHERE user_role = 'dentist'";
+    $dentistResult = $connection->query($dentistQuery);
+
+    //fetch data from the database of patient table and pass the value inside the select tag
+    $patientQuery = "SELECT * FROM patient_table";
+    $patientResult = $connection->query($patientQuery);
+?>
+
+
+
+<?php 
+    if(!isset($_SESSION['user']))
+    {
+        $_SESSION['user'] = session_id(); //generate current session_id for the current user
+    }
+    $session_uid = $_SESSION['user'];  // set session user to session_uid  
+    $datetime_string = date('c',time()); 
+
+    $patientName = $_SESSION['nickname'];
+    $patientMobileNumber = $_SESSION['patientMobileNumber'];
+    $status = 'Pending'; //default values of Status
+    
+    if(isset($_POST['action']) or isset($_GET['view'])){
+        if(isset($_GET['view'])){
+            header('Content-Type: application/json');
+            $start = $connection->real_escape_string($_GET["start"]);
+            $end = $connection->real_escape_string($_GET["end"]);
+            
+            $result = $connection->query("SELECT id, title, start_time, end_time FROM appointment_table WHERE (date(start_time) >= '".$start."' AND date(start_time) <= '".$end."') AND session_uid='".$session_uid."'");
+            
+            while($row = mysqli_fetch_assoc($result)){
+                $events[] = $row; 
+            }
+            echo json_encode($events); 
+            exit;
+        }
+        elseif($_POST['action'] == "add"){
+            $connection->query("INSERT INTO appointment_table (
+                title,
+                start_time,
+                end_time,
+                patient_name,
+                patient_mobile_number,
+                status,
+                session_uid
+                )
+                VALUES (
+                '".mysqli_real_escape_string($connection,$_POST["title"])."',
+                '".mysqli_real_escape_string($connection,date('Y-m-d H:i:s',strtotime($_POST["start"])))."',
+                '".mysqli_real_escape_string($connection,date('Y-m-d H:i:s',strtotime($_POST["end"])))."',
+                '".mysqli_real_escape_string($connection,$patientName)."',
+                '".mysqli_real_escape_string($connection,$patientMobileNumber)."',
+                '".mysqli_real_escape_string($connection,$status)."',
+                '".mysqli_real_escape_string($connection,$session_uid)."'
+                )");
+            header('Content-Type: application/json');
+            echo '{"id":"'.mysqli_insert_id($connection).'"}';
+            exit;
+        }
+        // elseif($_POST['action'] == "update"){
+        //     $connection->query("UPDATE appointment_table set 
+        //         title = '".mysqli_real_escape_string($connection,$_POST["title"])."', 
+        //         start_time = '".mysqli_real_escape_string($connection,date('Y-m-d H:i:s',strtotime($_POST["start"])))."', 
+        //         end_time = '".mysqli_real_escape_string($connection,date('Y-m-d H:i:s',strtotime($_POST["end"])))."',
+        //         where session_uid = '".mysqli_real_escape_string($connection,$session_uid)."' and id = '".mysqli_real_escape_string($connection,$_POST["id"])."'");
+        //     exit;
+        // }
+        elseif($_POST['action'] == "delete"){
+            $connection->query("DELETE from appointment_table where session_uid = '".mysqli_real_escape_string($connection,$session_uid)."' and id = '".mysqli_real_escape_string($connection,$_POST["id"])."'");
+            if (mysqli_affected_rows($connection) > 0) {
+                echo "1";
+            }
+            exit;
+        }
+    }
+    
 ?>
 
 
@@ -20,40 +98,8 @@
 </head>
 
 <body>
+    <?php include('./includes/patient_sidebar.php'); ?>
 
-    <div class="wrapper">
-        <header class="header">
-            <nav class="site-navbar">
-                <ul class="navbar-nav">
-                    <li class="nav-item <?php if($page =='index'){echo 'active';} ?>">
-                        <a class="nav-link" href="/Dental-Clinic/patient_dashboard.php">&nbsp;<i class="fas fa-tachometer-alt icon"></i><span class="link-text">Dashboard</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Dental-Clinic/patient_appointment.php">&nbsp;<i class="fas fa-calendar-check icon"></i><span class="link-text">Appointment Management&nbsp;&nbsp;<i class="fas fa-caret-down"></i></span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#collapseAppointment" role="button" aria-expanded="false" aria-controls="collapseExample">&nbsp;<i class="fas fa-user icon"></i><span class="link-text">&nbsp;Profile Management</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-user-cog icon"></i><span class="link-text">Change Password</span></a>
-                    </li>
-                    </li>
-                    <!--
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">&nbsp;<i class="fas fa-clipboard-list icon"></i><span class="link-text">&nbsp;&nbsp;&nbsp;Report Management&nbsp;&nbsp;<i class="fas fa-caret-down"></i></span></a>
-                    </li>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-user-cog icon"></i><span class="link-text">Settings&nbsp;&nbsp;<i class="fas fa-caret-down"></i></span></a>
-                    </li>
-                    -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="patient_logout.php"><i class="fas fa-sign-out-alt icon"></i><span class="link-text">Logout</span></a>
-                    </li>
-                </ul>
-            </nav>
-        </header>
-    </div>
 
     <main>
         <!-- Tabs Starts -->
@@ -61,28 +107,105 @@
             <div class="patientAppointmentTabs">
                 <ul class="nav nav-tabs" id="nav-tabs">
                     <li class="nav-item active">
-                        <a href="#new-appointment-tab" class="nav-link active" data-toggle="tab"><i class="far fa-calendar-plus"></i> New Appointment</a>
+                        <a href="#new-appointment-tab" class="nav-link active" data-toggle="tab"><i class="far fa-calendar-plus text-primary"></i> New Appointment</a>
                     </li>
 
                     <li class="nav-item">
-                        <a href="#cancelled-appointment-tab" class="nav-link" data-toggle="tab"><i class="far fa-calendar-times"></i> Cancelled Request</a>
+                        <a href="#cancelled-appointment-tab" class="nav-link" data-toggle="tab"><i class="far fa-calendar-times text-danger"></i> Cancelled Request</a>
                     </li>
                 </ul>
 
 
                 <!-- Calendar Starts -->
                 <div class="tab-content">
+                    <!--New Appointment Tab Start-->
                     <div class="tab-pane fade show active" id="new-appointment-tab">
-                        <p><i class="fas fa-info-circle icon mt-3"></i> Note: </p>
-                        <p>Select your Doctor then select the available Date and Time on the calendar and click Submit button to complete your online appointment.</p>
+                    <div class="mb-3"></div>
+                        <p class="d-flex align-items-center"><i class="fas fa-info-circle fa-2x icon align-items-center"></i>&nbsp;Note: </p>
+                        <p>Select the available Date and Time on the Calendar then select your Appointment Title, Doctor and When then click Submit button to complete your online appointment.</p>
 
                         <div class="container mt-5">
-                            <div id="calendar">
-
+                            <div class="row px-2">
+                                <label class="mb-3" for="calendar"><strong>Choose your appointment slot</strong></label>
+                                <div id="calendar">
+                                
+                                </div>
+                                    
                             </div>
                         </div>
-                            
-                    </div>
+
+                        <!--Modal Content Start-->
+                        <div id="createAppointmentModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Add Appointment</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="control-group">
+                                            <label class="control-label" for="title"><strong>Appointment Title</strong></label>
+                                            <div class="field desc">
+                                                <input type="text" class="form-control" id="title" name="title" placeholder="Appointment Title">
+                                            </div>
+                                        </div>
+
+                                        <label for="mobile-number"><strong>Select your doctor</strong></label>
+                                        <div class="form-group">                             
+                                            <select name="" id="doctor-name" style="width: 100%; height: 40px;">
+                                                <?php while($dentistRow = $dentistResult->fetch_array()):;?>
+                                                    <option><?php echo $dentistRow[1]; ?></option>
+                                                <?php endwhile;?>
+                                            </select>                
+                                        </div>
+                                        <hr>
+                                        
+                                        <input type="hidden" id="startTime"/>
+                                        <input type="hidden" id="endTime"/>
+
+                                        <div class="control-group">
+                                            <label class="control-label" for="when"><strong>When:</strong></label>
+                                            <div class="controls controls-row" id="when" style="margin-top:5px;">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                        <button type="submit" name="saveBtn" class="btn button" id="submitBtn" >Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div id="calendarModal" class="modal fade">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Appointment Details</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+
+                                    <div id="modalBody" class="modal-body">
+                                        <h4 id="modalTitle" class="modal-title"></h4>
+                                        <div id="modalWhen" style="margin-top:5px;"></div>
+                                    </div>
+
+                                    <input type="hidden" id="eventID"/>
+                                    
+                                    <div class="modal-footer">
+                                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                        <button type="submit" class="btn btn-danger" id="deleteBtn">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--Modal Content End-->
+
+
+                    </div><!--New Appointment Tab End-->
+
                     <div class="tab-pane fade" id="cancelled-appointment-tab">
                     <p><i class="fas fa-info-circle icon mt-3"></i> Note: </p>
                         <p>On this tab, you will see the Cancelled Request with your Information and Appointment Details you cancelled in table format for easily viewing of your Cancelled Request history.</p>
@@ -100,9 +223,9 @@
     <script src="./js/popper.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery.dataTables.js"></script>
-    <script src="./js/moment.js"></script>
+    <script src="./js/moment.min.js"></script>
     <script src="./js/fullcalendar.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js" crossorigin="anonymous"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js" crossorigin="anonymous"></script>
 
     <!-- Icons files -->
     <script src="./js/all.js"></script>
@@ -139,22 +262,147 @@
     <script>
         $(document).ready(function(){
             var calendar = $('#calendar').fullCalendar({
-                editable: true,
                 header: {
                     left: 'prev, next today',
                     center: 'title',
-                    right: 'month, agendaWeek, agendaDay'
+                    right: 'agendaWeek, agendaDay'
                 },
-                events: '',
+                defaultView: 'agendaWeek',
+                editable: true,
                 selectable: true,
-                selectHelper: true
+                allDaySlot: false,
+                selectHelper: true,
+                // slotMinTime: "18:00:00",
+                // slotMaxTime: "05:00:00",
+                slotDuration: '00:30:00',
+                // scrollTime: '06:00:00',
+                events: 'patient_load.php',
+
+                //show the modal Appointment Details, you can View or Delete
+                eventClick: function(event, jsEvent, view){
+                    startTime = $.fullCalendar.moment(event.start).format('ddd, MMM Do h:mm A');
+                    endTime = $.fullCalendar.moment(event.end).format('ddd, MMM Do h:mm A - YYYY');
+                    var when = startTime + ' to ' + endTime;
+                    $('#modalTitle').html(event.title);
+                    $('#modalWhen').text(when);
+                    $('#eventID').val(event.id);
+                    $('#calendarModal').modal('show');
+                },
+
+                //show the modal Add Appointment, you can Add an appointment
+                select: function(start, end, jsEvent){
+                        startTime = $.fullCalendar.moment(start).format('dddd, MMM Do, h:mm A');
+                        endTime = $.fullCalendar.moment(end).format('dddd, MMM Do, h:mm A - YYYY');
+                        var when = startTime + ' to ' + endTime;
+                        start = moment(start).format();
+                        end = moment(end).format();
+                        $('#createAppointmentModal #startTime').val(start);
+                        $('#createAppointmentModal #endTime').val(end);
+                        $('#createAppointmentModal #when').text(when);
+                        $('#createAppointmentModal').modal('toggle');
+                },
+                eventDrop: function(event, delta){
+                    var id = event.id;
+                    var title = event.title;
+                    var start = $.fullCalendar.formatDate(event.start, 'Y-MM-DD HH:mm:ss');
+                    var end = $.fullCalendar.formatDate(event.end, 'Y-MM-DD HH:mm:ss');
+                    
+                    $.ajax({
+                        url:"patient_fullCalendar_update.php",
+                        type:"POST",
+                        data:{id:id, title:title, start:start, end:end},
+                        success:function(){
+                            calendar.fullCalendar('refetchEvents');
+                            alert('Successfully Updated');
+                        }
+                    });
+                    // $.ajax({
+                    //     url: 'patient_appointment.php',
+                    //     data: 'action=update&title='+event.title+'&start='+moment(event.start).format()+'&end='+moment(event.end).format()+'&id='+event.id ,
+                    //     type: "POST",
+                    //     success: function(json) {
+                    //         console.log(json);
+                    //     }
+                    // });
+                },
+                eventResize: function(event) {
+                    var id = event.id;
+                    var title = event.title;
+                    var start = $.fullCalendar.formatDate(event.start, 'Y-MM-DD HH:mm:ss');
+                    var end = $.fullCalendar.formatDate(event.end, 'Y-MM-DD HH:mm:ss');
+                    
+                    $.ajax({
+                        url:"patient_fullCalendar_update.php",
+                        type:"POST",
+                        data:{id:id, title:title, start:start, end:end},
+                        success:function(){
+                            calendar.fullCalendar('refetchEvents');
+                            alert('Successfully Updated');
+                        }
+                    });
+                //     $.ajax({
+                //         url: 'patient_appointment.php',
+                //         data: 'action=update&title='+event.title+'&start='+moment(event.start).format()+'&end='+moment(event.end).format()+'&id='+event.id,
+                //         type: "POST",
+                //         success: function(json) {
+                //             console.log(json);
+                //         }
+                //     });
+                }
             });
+
+            $('#submitBtn').on('click', function(e){
+                // We don't want this to act as a link so cancel the link action
+                e.preventDefault();
+                doSubmit();
+            });
+            
+            $('#deleteBtn').on('click', function(e){
+                // We don't want this to act as a link so cancel the link action
+                e.preventDefault();
+                doDelete();
+            });
+
+            function doDelete(){
+                $("#calendarModal").modal('hide');
+                var eventID = $('#eventID').val();
+                $.ajax({
+                    url: 'patient_appointment.php',
+                    data: 'action=delete&id='+eventID,
+                    type: "POST",
+                    success: function(json) {
+                        if(json == 1)
+                            calendar.fullCalendar('removeEvents',eventID);
+                        else
+                            return false;
+                    }
+                });
+            }
+
+            function doSubmit(){
+                $("#createAppointmentModal").modal('hide');
+                var title = $('#title').val();
+                var startTime = $('#startTime').val();
+                var endTime = $('#endTime').val();
+                
+                $.ajax({
+                    url: 'patient_appointment.php',
+                    data: 'action=add&title='+title+'&start='+startTime+'&end='+endTime,
+                    type: "POST",
+                    success: function(json) {
+                        calendar.fullCalendar('renderEvent',{
+                            id: json.id,
+                            title: title,
+                            start: startTime,
+                            end: endTime,
+                        }, true);
+                    }
+                });
+                
+            }
         });
     </script>
 
-
-    </body><!--Body Ends-->
-</html>
 
 <?php 
     include('./includes/footer.php');

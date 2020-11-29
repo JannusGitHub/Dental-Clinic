@@ -31,6 +31,9 @@
                     while ($row = $result->fetch_assoc()) {
                             $_SESSION['status'] = 'valid';
                             $_SESSION['username'] = $row['username'];
+                            
+                            $_SESSION['nickname'] = $row['nickname'];
+                            $_SESSION['patientMobileNumber'] = $row['mobile_number'];
 
                             //change this alert to login into patient dashboard
                             // echo ("<script>alert('Success!');</script>");
