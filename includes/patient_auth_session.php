@@ -1,6 +1,6 @@
 <?php
     session_start();
-    if($_SESSION['status'] == 'invalid' || empty($_SESSION['status'])){
+    if($_SESSION['username'] == '' || $_SESSION['status'] == 'invalid' || empty($_SESSION['status'])){
         //set status to invalid
         $_SESSION['status'] = 'invalid';
 

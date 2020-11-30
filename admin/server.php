@@ -126,6 +126,8 @@ if(isset($_POST['key'])){
         && isNotEmpty($gender) && isNotEmpty($nickname) && isNotEmpty($occupation)){
             $connection->query("UPDATE patient_table SET username ='$username', password ='" . md5($password) . "', birthday ='$birthday', age ='$age', mobile_number ='$mobileNumber', full_address ='$fullAddress', gender ='$gender', nickname ='$nickname', occupation ='$occupation' WHERE id='$rowID'");
                 exit('Successfully Updated');
+        }else{
+            exit('Not Updated');
         }
     }
 }

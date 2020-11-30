@@ -10,8 +10,7 @@
                         <div class="collapse" id="collapsePatient">
                             <div class="card card-body">
                                 <a class="<?php if($page =='patient'){echo 'active';} ?>" href="../admin/patient.php">Add New Patient</a>
-                                <a class="<?php if($page =='patient_prescription'){echo 'active';} ?>" href="#">Add Patient Prescription</a>
-                                <a class="<?php if($page =='patient_treatment'){echo 'active';} ?>"href="#">Add Patient Treatment</a>                                                                            
+                                <a class="<?php if($page =='patient_treatment'){echo 'active';} ?>"href="../admin/patient_treatment.php">Add Patient Treatment</a>                                                                            
                                 <a class="<?php if($page =='patient_bill'){echo 'active';} ?>" href="#">Add Patient Bill</a>                                
                             </div>
                         </div>
@@ -23,6 +22,7 @@
                         <a class="nav-link" data-toggle="collapse" href="#collapseAppointment" role="button" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-home icon"></i><span class="link-text">Appointment Management&nbsp;&nbsp;<i class="fas fa-caret-down"></i></span></a>
                         <div class="collapse" id="collapseAppointment">
                             <div class="card card-body">
+                                <a class="<?php if($page =='view_appointment'){echo 'active';} ?>" href="../admin/view_appointment.php">View Appointment</a>                               
                                 <a class="<?php if($page =='patient_appointment'){echo 'active';} ?>" href="../admin/patient_appointment.php">Add New Appointment</a>                               
                             </div>
                         </div>

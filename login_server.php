@@ -32,7 +32,10 @@
                         if($row['user_role'] == 'admin'){
                             $_SESSION['status'] = 'valid';
                             $_SESSION['username'] = $row['username'];
+                            $_SESSION['user_id'] = $row['id'];
                             
+                            // $username = $_SESSION['username'];
+                            // echo "<script>alert('$username')</script>";
                             // $userRole = $row['user_role'];
                             //echo ("<script>alert('$userRole');</script>");
                             echo ("<script>window.location.href='/Dental-Clinic/admin/index.php'</script>");

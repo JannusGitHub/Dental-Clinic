@@ -21,6 +21,7 @@
     $session_uid = $_SESSION['user'];  // set session user to session_uid  
     $datetime_string = date('c',time()); 
 
+    $patient_id = $_SESSION['patient_id'];
     $patientName = $_SESSION['nickname'];
     $patientMobileNumber = $_SESSION['patientMobileNumber'];
     $status = 'Pending'; //default values of Status
@@ -40,6 +41,7 @@
             exit;
         }
         elseif($_POST['action'] == "add"){
+            $doctorName = $_POST['doctorName'];
             $connection->query("INSERT INTO appointment_table (
                 title,
                 start_time,
@@ -47,7 +49,9 @@
                 patient_name,
                 patient_mobile_number,
                 status,
-                session_uid
+                session_uid,
+                user_id,
+                patient_id
                 )
                 VALUES (
                 '".mysqli_real_escape_string($connection,$_POST["title"])."',
@@ -56,7 +60,9 @@
                 '".mysqli_real_escape_string($connection,$patientName)."',
                 '".mysqli_real_escape_string($connection,$patientMobileNumber)."',
                 '".mysqli_real_escape_string($connection,$status)."',
-                '".mysqli_real_escape_string($connection,$session_uid)."'
+                '".mysqli_real_escape_string($connection,$session_uid)."',
+                (SELECT id FROM user_table WHERE full_name = '$doctorName'),
+                '".mysqli_real_escape_string($connection,$patient_id)."'
                 )");
             header('Content-Type: application/json');
             echo '{"id":"'.mysqli_insert_id($connection).'"}';
@@ -110,9 +116,9 @@
                         <a href="#new-appointment-tab" class="nav-link active" data-toggle="tab"><i class="far fa-calendar-plus text-primary"></i> New Appointment</a>
                     </li>
 
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a href="#cancelled-appointment-tab" class="nav-link" data-toggle="tab"><i class="far fa-calendar-times text-danger"></i> Cancelled Request</a>
-                    </li>
+                    </li> -->
                 </ul>
 
 
@@ -122,7 +128,7 @@
                     <div class="tab-pane fade show active" id="new-appointment-tab">
                     <div class="mb-3"></div>
                         <p class="d-flex align-items-center"><i class="fas fa-info-circle fa-2x icon align-items-center"></i>&nbsp;Note: </p>
-                        <p>Select the available Date and Time on the Calendar then select your Appointment Title, Doctor and When then click Submit button to complete your online appointment.</p>
+                        <p>Select the available Date and Time on the Calendar then select your Appointment Title, Doctor and When, then click Submit button to complete your online appointment. If you want to see the Appointment Details, just click the Appointment.</p>
 
                         <div class="container mt-5">
                             <div class="row px-2">
@@ -151,7 +157,7 @@
                                             </div>
                                         </div>
 
-                                        <label for="mobile-number"><strong>Select your doctor</strong></label>
+                                        <label for="doctor-name"><strong>Select your doctor</strong></label>
                                         <div class="form-group">                             
                                             <select name="" id="doctor-name" style="width: 100%; height: 40px;">
                                                 <?php while($dentistRow = $dentistResult->fetch_array()):;?>
@@ -197,7 +203,7 @@
                                     
                                     <div class="modal-footer">
                                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                                        <button type="submit" class="btn btn-danger" id="deleteBtn">Delete</button>
+                                        <!-- <button type="submit" class="btn btn-danger" id="deleteBtn">Delete</button> -->
                                     </div>
                                 </div>
                             </div>
@@ -206,10 +212,10 @@
 
                     </div><!--New Appointment Tab End-->
 
-                    <div class="tab-pane fade" id="cancelled-appointment-tab">
+                    <!-- <div class="tab-pane fade" id="cancelled-appointment-tab">
                     <p><i class="fas fa-info-circle icon mt-3"></i> Note: </p>
                         <p>On this tab, you will see the Cancelled Request with your Information and Appointment Details you cancelled in table format for easily viewing of your Cancelled Request history.</p>
-                    </div>
+                    </div> -->
                 </div>
                 <!-- Calendar Ends -->
             </div>
@@ -236,9 +242,19 @@
             margin: 5px 0 5px;
             padding: 5px;
         }
+        
 
         #nav-tabs a{
             color: black;
+        }
+        
+        /* Full Calendar Styling */
+        .fc-event, .fc-event-dot {
+            background: linear-gradient(#00c6ff, #0072ff);
+        }
+
+        .fc-event {
+            border: none !important;
         }
 
         #nav-tabs li:active{
@@ -268,8 +284,9 @@
                     right: 'agendaWeek, agendaDay'
                 },
                 defaultView: 'agendaWeek',
-                editable: true,
+                // editable: true,
                 selectable: true,
+                // dropable: false,
                 allDaySlot: false,
                 selectHelper: true,
                 // slotMinTime: "18:00:00",
@@ -301,54 +318,38 @@
                         $('#createAppointmentModal #when').text(when);
                         $('#createAppointmentModal').modal('toggle');
                 },
-                eventDrop: function(event, delta){
-                    var id = event.id;
-                    var title = event.title;
-                    var start = $.fullCalendar.formatDate(event.start, 'Y-MM-DD HH:mm:ss');
-                    var end = $.fullCalendar.formatDate(event.end, 'Y-MM-DD HH:mm:ss');
+                // eventDrop: function(event, delta){
+                //     var id = event.id;
+                //     var title = event.title;
+                //     var start = $.fullCalendar.formatDate(event.start, 'Y-MM-DD HH:mm:ss');
+                //     var end = $.fullCalendar.formatDate(event.end, 'Y-MM-DD HH:mm:ss');
                     
-                    $.ajax({
-                        url:"patient_fullCalendar_update.php",
-                        type:"POST",
-                        data:{id:id, title:title, start:start, end:end},
-                        success:function(){
-                            calendar.fullCalendar('refetchEvents');
-                            alert('Successfully Updated');
-                        }
-                    });
-                    // $.ajax({
-                    //     url: 'patient_appointment.php',
-                    //     data: 'action=update&title='+event.title+'&start='+moment(event.start).format()+'&end='+moment(event.end).format()+'&id='+event.id ,
-                    //     type: "POST",
-                    //     success: function(json) {
-                    //         console.log(json);
-                    //     }
-                    // });
-                },
-                eventResize: function(event) {
-                    var id = event.id;
-                    var title = event.title;
-                    var start = $.fullCalendar.formatDate(event.start, 'Y-MM-DD HH:mm:ss');
-                    var end = $.fullCalendar.formatDate(event.end, 'Y-MM-DD HH:mm:ss');
-                    
-                    $.ajax({
-                        url:"patient_fullCalendar_update.php",
-                        type:"POST",
-                        data:{id:id, title:title, start:start, end:end},
-                        success:function(){
-                            calendar.fullCalendar('refetchEvents');
-                            alert('Successfully Updated');
-                        }
-                    });
                 //     $.ajax({
-                //         url: 'patient_appointment.php',
-                //         data: 'action=update&title='+event.title+'&start='+moment(event.start).format()+'&end='+moment(event.end).format()+'&id='+event.id,
-                //         type: "POST",
-                //         success: function(json) {
-                //             console.log(json);
+                //         url:"patient_fullCalendar_update.php",
+                //         type:"POST",
+                //         data:{id:id, title:title, start:start, end:end},
+                //         success:function(){
+                //             calendar.fullCalendar('refetchEvents');
+                //             alert('Successfully Updated');
                 //         }
                 //     });
-                }
+                // },
+                // eventResize: function(event) {
+                //     var id = event.id;
+                //     var title = event.title;
+                //     var start = $.fullCalendar.formatDate(event.start, 'Y-MM-DD HH:mm:ss');
+                //     var end = $.fullCalendar.formatDate(event.end, 'Y-MM-DD HH:mm:ss');
+                    
+                //     $.ajax({
+                //         url:"patient_fullCalendar_update.php",
+                //         type:"POST",
+                //         data:{id:id, title:title, start:start, end:end},
+                //         success:function(){
+                //             calendar.fullCalendar('refetchEvents');
+                //             alert('Successfully Updated');
+                //         }
+                //     });
+                // }
             });
 
             $('#submitBtn').on('click', function(e){
@@ -384,10 +385,11 @@
                 var title = $('#title').val();
                 var startTime = $('#startTime').val();
                 var endTime = $('#endTime').val();
+                var doctorName = $('#doctor-name').val();
                 
                 $.ajax({
                     url: 'patient_appointment.php',
-                    data: 'action=add&title='+title+'&start='+startTime+'&end='+endTime,
+                    data: 'action=add&title='+title+'&start='+startTime+'&end='+endTime+'&doctorName='+doctorName,
                     type: "POST",
                     success: function(json) {
                         calendar.fullCalendar('renderEvent',{

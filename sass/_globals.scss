@@ -28,8 +28,7 @@ h2,
 h3,
 h4,
 h5,
-h6,
-span{
+h6{
     color: $dark-text;
     font-weight: map-get($font-weights, semi-medium);
 }

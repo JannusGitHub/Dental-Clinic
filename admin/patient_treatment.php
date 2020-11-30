@@ -1,21 +1,27 @@
 <?php
+    require('connection.php');
     include('../includes/auth_session.php');
     include('../includes/header.php');
         
     include('../includes/sidebar.php');
     //pass this value to sidebar.php .nav-item to active the class and highlight
-    $page = 'patient';
+    $page = 'patient_treatment';
+    
+    //fetch data from the database of patient table and pass the value inside the select tag
+    $patientQuery = "SELECT * FROM patient_table";
+    $patientResult = $connection->query($patientQuery);
 ?>
+
 
     <main class="main">
         <div class="container-fluid text-right my-2">
-            <button type="button" class="btn button" id="add" data-toggle="modal" data-target="#patientModal">
-                Add Patient
+            <button type="button" class="btn button" id="add" data-toggle="modal" data-target="#patientTreatmentModal">
+                Add Patient Treatment
             </button>
         </div>
 
         <!-- Add Modal -->
-        <div class="modal fade" id="patientModal" tabindex="-1" role="dialog" aria-labelledby="addLabel" aria-hidden="true">
+        <div class="modal fade" id="patientTreatmentModal" tabindex="-1" role="dialog" aria-labelledby="addLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -26,41 +32,36 @@
                     </div>
 
                     <div class="modal-body">
-                        <form id="patientForm">
+                        <form id="patientTreatmentForm">
                             <div class="form-group">                                
-                                <input type="text" class="form-control" id="username" placeholder="Enter username">                    
+                                <select name="" id="patient-name" style="width: 100%; height: 40px;">
+                                    <?php while($patientRow = $patientResult->fetch_array()):;?>
+                                        <option><?php echo $patientRow['nickname']; ?></option>
+                                    <?php endwhile;?>
+                                </select>    
                             </div>  
                             <input type="hidden" id="editRowID" value="0">                    
                             <div class="form-group">                                
-                                <input type="password" class="form-control" id="password" placeholder="Enter password">                    
+                                <input type="date" class="form-control" id="treatment-date" placeholder="Treatment Date">                    
                             </div>
                             <div class="form-group">                                
-                                <input type="date" class="form-control" id="birthday" placeholder="Enter birthday">                    
+                                <input type="number" class="form-control" id="tooth-number" placeholder="Tooth Number">                    
                             </div>
                             <div class="form-group">                                
-                                <input type="text" class="form-control" id="age" placeholder="Enter age">                    
+                                <input type="text" class="form-control" id="findings" placeholder="Findings">                    
                             </div>
                             <div class="form-group">                                
-                                <input type="text" class="form-control" id="mobile-number" placeholder="Enter mobile number">                    
+                                <input type="text" class="form-control" id="procedures" placeholder="Procedures">                    
                             </div>
                             <div class="form-group">                                
-                                <input type="text" class="form-control" id="full-address" placeholder="Enter full address">                    
-                            </div>
-                            <div class="form-group">                                
-                                <input type="text" class="form-control" id="gender" placeholder="Enter gender">                    
-                            </div>
-                            <div class="form-group">                                
-                                <input type="text" class="form-control" id="nickname" placeholder="Enter nickname">                    
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="occupation" placeholder="Enter occupation">                    
+                                <textarea class="form-control" id="description" cols="30" rows="2" placeholder="Description"></textarea>               
                             </div>
                     </div>
                     <div class="modal-footer">
                         <input type="submit" name="saveBtn" class="btn button saveBtn" id="manageBtn" onclick="manageData('addNew')" value="Save">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
-                    </form> <!-- This solves my problem -->
+                    </form>
                 </div>
             </div>
         </div> <!-- Modal ends -->
@@ -72,15 +73,11 @@
                     <tr>
                         <th>Action</th>
                         <th>ID</th>
-                        <th>Username</th>
-                        <th>Password</th>
-                        <th>Birthday</th>
-                        <th>Age</th>
-                        <th>Number</th>
-                        <th>Address</th>
-                        <th>Gender</th>
-                        <th>Nickname</th>
-                        <th>Occupation</th>
+                        <th>Treatment Date</th>
+                        <th>Tooth Number</th>
+                        <th style="width: 160px;">Findings</th>
+                        <th style="width: 160px;">Procedures</th>
+                        <th style="width: 200px;">Description</th>
                     </tr>
                 </thead>
 
@@ -91,8 +88,9 @@
         <!-- Table ends -->
     </main>
 
-    <!--Include the script first, before using any jquery script-->
-    <?php include('../includes/script.php') ?>
+
+<!--Include the script first, before using any jquery script-->
+<?php include('../includes/script.php') ?>
 
 
 <!--Include footer-->
@@ -102,7 +100,6 @@
 
 <script>
     $(document).ready(function() {
-
         //execute the viewData() function to reload data asynchronously when document is ready
         viewData();
         
@@ -113,15 +110,14 @@
             $(".saveBtn").val('Save').attr('onclick', "manageData('addNew')");
 
             //reset the fields value
-            $("#patientForm").trigger("reset");
+            $("#patientTreatmentForm").trigger("reset");
 
             //change the modal-header BG, modal-title text color, modal-title text & show modal
             $(".modal-header").css( "background", "linear-gradient(#00c6ff, #0072ff)");
             $(".modal-title").css( "color", "white" );
-            $(".modal-title").text("Add Patient");
-            $('#patientModal').modal('show');	    
+            $(".modal-title").text("Add Patient Treatment");
+            $('#patientTreatmentModal').modal('show');	    
         });
-
     });
 
 
@@ -129,7 +125,7 @@
     function viewData(){
         $.ajax({
             method: 'POST',
-            url: 'server.php',
+            url: 'patient_treatment_server.php',
             dataType: 'text',
             data: {
                 key: 'viewData'
@@ -144,7 +140,7 @@
 
     //Solves my problem using setTimeout <3
     //cancel the default submission of the form & execute the viewData() function to reload data asynchronously
-    $('#patientForm').on('submit', function(event){
+    $('#patientTreatmentForm').on('submit', function(event){
         event.preventDefault();
         setTimeout(() => {
             viewData();
@@ -181,45 +177,38 @@
     }
     //==============================INSERT DATA==============================
     function manageData(key){
-        var username = $('#username');
-        var password = $('#password');
-        var birthday = $('#birthday');
-        var age = $('#age');
-        var mobileNumber = $('#mobile-number');
-        var fullAddress = $('#full-address');
-        var gender = $('#gender');
-        var nickname = $('#nickname');
-        var occupation = $('#occupation');
+        var patientName = $('#patient-name');
+        var treatmentDate = $('#treatment-date');
+        var toothNumber = $('#tooth-number');
+        var findings = $('#findings');
+        var procedures = $('#procedures');
+        var description = $('#description');
         var editRowID = $('#editRowID');
 
-        if(isNotEmpty(username) && isNotEmpty(password) && isNotEmpty(birthday)
-        && isNotEmpty(age) && isNotEmpty(mobileNumber) && isNotEmpty(fullAddress) 
-        && isNotEmpty(gender) && isNotEmpty(nickname) && isNotEmpty(occupation)){
+        if(isNotEmpty(treatmentDate) && isNotEmpty(toothNumber) && isNotEmpty(findings)
+        && isNotEmpty(procedures) && isNotEmpty(description)){
             $.ajax({
                 method: 'POST',
-                url: 'server.php',
+                url: 'patient_treatment_server.php',
                 dataType: 'text',
                 data: {
                     key: key,
-                    username: username.val(),
-                    password: password.val(),
-                    birthday: birthday.val(),
-                    age: age.val(),
-                    mobileNumber: mobileNumber.val(),
-                    fullAddress: fullAddress.val(),
-                    gender: gender.val(),
-                    nickname: nickname.val(),
-                    occupation: occupation.val(),
+                    patientName: patientName.val(),
+                    treatmentDate: treatmentDate.val(),
+                    toothNumber: toothNumber.val(),
+                    findings: findings.val(),
+                    procedures: procedures.val(),
+                    description: description.val(),
                     rowID: editRowID.val()
                 },
                 success: function(data){
                     if(data != "Successfully Inserted"){
                         alert(data);
-                        $("#patientModal").modal('show');
+                        $("#patientTreatmentModal").modal('show');
                     }
                     else{
                         //close the modal after the insert and reload data
-                        $("#patientModal").modal('hide');
+                        $("#patientTreatmentModal").modal('hide');
                         viewData();
                     }
                 }
@@ -231,10 +220,16 @@
     //==============================UPDATE DATA==============================
     //UPDATE/getRowData and change the saveBtn onclick to manageData('updateRow')
     function edit(rowID){
-        $('#patientModal').modal('show');
+        $('#patientTreatmentModal').modal('show');
+        
+        //change the modal-header BG, modal-title text color, modal-title text & the saveBtn onclick to update
+        $(".modal-header").css( "background", "linear-gradient(#00c6ff, #0072ff)");
+        $(".modal-title").css( "color", "white" );
+        $(".modal-title").text("Edit Patient Treatment");
+        $('.saveBtn').val('Update').attr('onclick', "manageData('updateRow')");
         $.ajax({
             method: 'POST',
-            url: 'server.php',
+            url: 'patient_treatment_server.php',
             dataType: 'json',
             data: {
                 key: 'getRowData',
@@ -243,26 +238,18 @@
             success: function(data){
                 //catch/retrieve the data in the row
                 $('#editRowID').val(rowID);
-                $('#username').val(data.username);
-                $('#password').val(data.password);
-                $('#birthday').val(data.birthday);
-                $('#age').val(data.age);
-                $('#mobile-number').val(data.mobileNumber);
-                $('#full-address').val(data.fullAddress);
-                $('#gender').val(data.gender);
-                $('#nickname').val(data.nickname);
-                $('#occupation').val(data.occupation);
+                $('#patient-name').val(data.patientName);
+                $('#treatment-date').val(data.treatmentDate);
+                $('#tooth-number').val(data.toothNumber);
+                $('#findings').val(data.findings);
+                $('#procedures').val(data.procedures);
+                $('#description').val(data.description);
 
-                //change the modal-header BG, modal-title text color, modal-title text & the saveBtn onclick to update
-                $(".modal-header").css( "background", "linear-gradient(#00c6ff, #0072ff)");
-                $(".modal-title").css( "color", "white" );
-                $(".modal-title").text("Edit Patient");
-                $('.saveBtn').val('Update').attr('onclick', "manageData('updateRow')");
 
                 //after the update submission, close the modal
                 $('.saveBtn').attr("onclick", "manageData('updateRow')").on('click', function(){
                     setTimeout(() => {
-                        $('#patientModal').modal('hide');
+                        $('#patientTreatmentModal').modal('hide');
                     }, 400);
                 });
             }
@@ -275,14 +262,14 @@
     function deleteRow(rowID){
         if (confirm('Are you sure?')) {
             $.ajax({
-                url: 'server.php',
+                url: 'patient_treatment_server.php',
                 method: 'POST',
                 dataType: 'text',
                 data: {
                     key: 'deleteRow',
                     rowID: rowID
                 }, success: function (response) {
-                    $("#username_"+rowID).parent().remove();
+                    $("#treatment_date"+rowID).parent().remove();
                     alert(response);
                     viewData();
                 }
@@ -290,34 +277,4 @@
         }
         
     }
-
-
-    // function refresh(){
-    //     var user_id, option;
-    //     option = 4;      
-    //     tableUsers = $('.table').DataTable({  
-    //         "ajax":{            
-    //             "url": "server.php", 
-    //             "method": 'POST', //we use the POST method
-    //             "data":{
-    //                 option:option
-    //             }, //we send option 4 to make a SELECT
-    //             "dataType":"json"
-    //         },
-    //         "columns":[
-    //             {"defaultContent": "<div class='text-center'><div class='btn-group'><button class='btn button btn-sm btnEdit'><i class='fas fa-edit'></i></button><button class='btn btn-danger btn-sm btnDelete'><i class='fas fa-trash-alt'></i></button></div></div>"},
-    //             {"data": "id"},
-    //             {"data": "username"},
-    //             {"data": "password"},
-    //             {"data": "birthday"},
-    //             {"data": "age"},
-    //             {"data": "mobile_number"},
-    //             {"data": "address"},
-    //             {"data": "gender"},
-    //             {"data": "nickname"},
-    //             {"data": "occupation"}
-    //         ]
-    //     });    
-    // }
-    
 </script>

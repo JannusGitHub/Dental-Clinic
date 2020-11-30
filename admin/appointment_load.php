@@ -1,6 +1,6 @@
 <?php 
-    require('./admin/connection.php');
-    require('./includes/patient_auth_session.php');
+    require('connection.php');
+    require('../includes/auth_session.php');
 
     if(!isset($_SESSION['user']))
     {
@@ -9,7 +9,7 @@
     $session_uid = $_SESSION['user'];  // set session user to session_uid  
     $datetime_string = date('c',time()); 
 
-    // $patientName = $_SESSION['nickname'];
+    $patientName = $_SESSION['nickname'];
     $patientMobileNumber = $_SESSION['patientMobileNumber'];
     $status = 'Pending'; //default values of Status
 

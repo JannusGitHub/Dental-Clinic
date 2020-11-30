@@ -5,7 +5,7 @@
     include('connection.php');
 
     //pass this value to sidebar.php .nav-item to active the class and highlight
-    $page ='index';
+    $page = 'index';
 
     include('../includes/sidebar.php');
     $query = "SELECT COUNT(1) FROM user_table";
@@ -17,7 +17,7 @@
     $totalPatient = $resultPatient->fetch_array();
     
 ?>
-    <main>  
+    <main>
         <div class="container">
             <h2 class="mt-1">Dashboard</h2>
             <p class="mb-4">Hi <?php echo $_SESSION['username']; ?>, welcome to Mapolon Dental Clinic</p>
