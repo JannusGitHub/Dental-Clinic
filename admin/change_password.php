@@ -1,30 +1,14 @@
 <?php 
-    require('./admin/connection.php');
-    require('./includes/patient_auth_session.php');
+    require('connection.php');
+    require('../includes/auth_session.php');
 
-
+    include('../includes/header.php');
+    include('../includes/sidebar.php');
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>Mapolon Dental Clinic</title>
-
-    <!-- CSS files -->
-    <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/datatables.css">
-    <link rel="stylesheet" href="./css/fullcalendar.css">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" crossorigin="anonymous" /> -->
-    <link rel="stylesheet" href="./css/style.css">
-</head>
-
-<body>
-    <?php include('./includes/patient_sidebar.php'); ?>
 
     <main style="overflow-x: hidden;">
-        <form id="changePasswordForm" action="patient_change_password_server.php" method="POST">
+        <form id="changePasswordForm" action="change_password_server.php" method="POST">
             <div class="container m-2">
                 <div class="row border-left" style="border-width: 3px !important;">
                     <div class="col-7">
@@ -67,17 +51,11 @@
     }
     </style>
 
-    <script src="./js/jquery.js"></script>
-    <!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script> -->
-    <script src="./js/popper.js"></script>
-    <script src="./js/bootstrap.min.js"></script>
-    <script src="./js/jquery.dataTables.js"></script>
-    <script src="./js/moment.min.js"></script>
-    <script src="./js/fullcalendar.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js" crossorigin="anonymous"></script>
 
-    <!-- Icons files -->
-    <script src="./js/all.js"></script>
+<?php
+    include('../includes/script.php');
+?>
+
 
     <script>
         $(document).ready(function(){
@@ -89,7 +67,7 @@
                 var confirmPassword = $('#confirm-password').val();
                 var saveBtn = $('#saveBtn').val();
                 
-                $('.form-message').load('patient_change_password_server.php', {
+                $('.form-message').load('change_password_server.php', {
                     currentPassword: currentPassword,
                     newPassword: newPassword,
                     confirmPassword: confirmPassword,
@@ -100,5 +78,7 @@
         });
     </script>
 
-    </body><!--Body Ends-->
-</html>
+
+<?php
+    include('../includes/footer.php');
+?>

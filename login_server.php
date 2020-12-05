@@ -1,15 +1,17 @@
 <?php 
     require('./admin/connection.php');
-    session_start();
-    if($_SESSION['status'] == 'invalid' || empty($_SESSION['status'])){
-        //set status to invalid
-        $_SESSION['status'] = 'invalid';
-    }
 
-    if($_SESSION['status'] == 'valid'){
+    session_start();
+    if(isset($_SESSION['status'])){
+        // header("Location: /admin/index.php");
         echo ("<script>window.location.href='/Dental-Clinic/admin/index.php</script>");
     }
-    
+        // else{
+    //     echo ("<script>window.location.href='/Dental-Clinic/admin/index.php</script>");
+    // }
+    // if($_SESSION['status'] == 'valid'){
+    //     echo ("<script>window.location.href='/Dental-Clinic/admin/index.php</script>");
+    // }
 
     if(isset($_POST['submit'])){
         $username = trim($_POST['username']);
@@ -31,13 +33,13 @@
                     while ($row = $result->fetch_assoc()) {
                         if($row['user_role'] == 'admin'){
                             $_SESSION['status'] = 'valid';
-                            $_SESSION['username'] = $row['username'];
+                            $_SESSION['username_session'] = $row['username'];
                             $_SESSION['user_id'] = $row['id'];
                             
-                            // $username = $_SESSION['username'];
+                            // $username = $_SESSION['username_session'];
                             // echo "<script>alert('$username')</script>";
                             // $userRole = $row['user_role'];
-                            //echo ("<script>alert('$userRole');</script>");
+                            // echo ("<script>alert('$userRole');</script>");
                             echo ("<script>window.location.href='/Dental-Clinic/admin/index.php'</script>");
                         }else{
                             $_SESSION['status'] = 'invalid';

@@ -9,11 +9,10 @@ if(isset($_POST['key'])){
     if($_POST['key'] == 'getRowData'){
         $rowID = $connection->real_escape_string($_POST['rowID']);
         if($rowID !== ''){
-            $query = $connection->query("SELECT patient_table.nickname, patient_treatment_table.treatment_date, patient_treatment_table.tooth_number, patient_treatment_table.findings, patient_treatment_table.procedures, patient_treatment_table.description 
-            FROM patient_treatment_table
-            LEFT JOIN patient_table ON patient_table.id = patient_treatment_table.patient_id
-            WHERE patient_treatment_table.id= '$rowID'
-            ORDER BY patient_treatment_table.id ASC");
+            $query = $connection->query("SELECT patient_table.nickname, patient_treatment_table.treatment_date, patient_treatment_table.tooth_number, patient_treatment_table.findings, patient_treatment_table.procedures, patient_treatment_table.description
+            FROM patient_treatment_table, patient_table WHERE patient_table.id = patient_treatment_table.patient_id 
+            AND patient_treatment_table.id = '$rowID'
+            ORDER BY patient_treatment_table.id DESC");
 
             $result = $query->fetch_array();
             $jsonArray = array(
@@ -22,7 +21,7 @@ if(isset($_POST['key'])){
                 'toothNumber' => $result['tooth_number'],
                 'findings' => $result['findings'],
                 'procedures' => $result['procedures'],
-                'description' => $result['description'],
+                'description' => $result['description']
             );
     
             exit(json_encode($jsonArray));
@@ -34,7 +33,7 @@ if(isset($_POST['key'])){
     //view/refresh data when new record has been saved
     if($_POST['key'] == 'viewData'){
 
-        $result = $connection->query("SELECT patient_table.id, patient_treatment_table.treatment_date, patient_treatment_table.tooth_number, patient_treatment_table.findings, patient_treatment_table.procedures, patient_treatment_table.description 
+        $result = $connection->query("SELECT patient_treatment_table.id, patient_treatment_table.treatment_date, patient_treatment_table.tooth_number, patient_treatment_table.findings, patient_treatment_table.procedures, patient_treatment_table.description 
         FROM patient_treatment_table 
         LEFT JOIN patient_table ON patient_table.id = patient_treatment_table.patient_id
         ORDER BY patient_treatment_table.id ASC");
@@ -65,7 +64,7 @@ if(isset($_POST['key'])){
     //==================DELETE==================
     if ($_POST['key'] == 'deleteRow') {
         $rowID = $connection->real_escape_string($_POST['rowID']);
-        $connection->query("DELETE FROM patient_treatment_tab WHERE id='$rowID'");
+        $connection->query("DELETE FROM patient_treatment_table WHERE id='$rowID'");
         exit('Successfully Deleted!');
     }
 
@@ -101,6 +100,26 @@ if(isset($_POST['key'])){
             }
         }
         
+    }
+
+
+    //=================UPDATE==================
+    //update row when the manageData('updateRow') btn is clicked
+    if($_POST['key'] == 'updateRow'){
+        $treatmentDate = $connection->real_escape_string($_POST['treatmentDate']);
+        $patientName = $connection->real_escape_string($_POST['patientName']);
+        $toothNumber = $connection->real_escape_string($_POST['toothNumber']);
+        $findings = $connection->real_escape_string($_POST['findings']);
+        $procedures = $connection->real_escape_string($_POST['procedures']);
+        $description = $connection->real_escape_string($_POST['description']);
+        $rowID = $connection->real_escape_string($_POST['rowID']);
+        if(isNotEmpty($treatmentDate) && isNotEmpty($patientName) && isNotEmpty($toothNumber)
+        && isNotEmpty($findings) && isNotEmpty($procedures) && isNotEmpty($description)){
+            $connection->query("UPDATE patient_treatment_table SET treatment_date ='$treatmentDate', tooth_number ='$toothNumber', findings ='$findings', procedures ='$procedures', description ='$description' WHERE id='$rowID'");
+                exit('Successfully Updated');
+        }else{
+            exit('Not Updated');
+        }
     }
 }
 

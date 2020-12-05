@@ -65,7 +65,49 @@
                 '".mysqli_real_escape_string($connection,$patient_id)."'
                 )");
             header('Content-Type: application/json');
-            echo '{"id":"'.mysqli_insert_id($connection).'"}';
+            // echo '{"id":"'.mysqli_insert_id($connection).'"}';
+            echo "1";
+
+            
+            //##########################################################################
+            // ITEXMO SEND SMS API - PHP - CURL-LESS METHOD
+            // Visit www.itexmo.com/developers.php for more info about this API
+            function itexmo($number,$message,$apicode,$passwd){
+                $url = 'https://www.itexmo.com/php_api/api.php';
+                $itexmo = array('1' => $number, '2' => $message, '3' => $apicode, 'passwd' => $passwd);
+                $param = array(
+                    'http' => array(
+                        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                        'method'  => 'POST',
+                        'content' => http_build_query($itexmo),
+                    ),
+                );
+                $context  = stream_context_create($param);
+                return file_get_contents($url, false, $context);
+            }
+            //##########################################################################
+
+            $title = $_POST["title"];
+            $message = 'Appointment Title: ' . $title . "\r\n" .
+            "When: " . date('H:i',strtotime($_POST["start"])) . ' to '. date('H:i m-d-Y',strtotime($_POST["end"])) . "\r\n" .
+            "From: " . $patientName . "\r\n";
+            
+            //change this $number to send message in to your number
+            $number = '09287285612';
+            $apiCode = 'TR-JANNU285612_6ADWX';
+            $apiPassword = '1ewf&&y85[';
+
+            $result = itexmo($number, $message, $apiCode, $apiPassword);
+            if ($result == ""){
+                echo "iTexMo: No response from server!!!
+                Please check the METHOD used (CURL or CURL-LESS). If you are using CURL then try CURL-LESS and vice versa.	
+                Please CONTACT US for help. ";	
+            }else if ($result == 0){
+                echo "Message Sent!";
+            }
+            else{	
+                echo "Error Num ". $result . " was encountered!";
+            }
             exit;
         }
         // elseif($_POST['action'] == "update"){
@@ -76,13 +118,13 @@
         //         where session_uid = '".mysqli_real_escape_string($connection,$session_uid)."' and id = '".mysqli_real_escape_string($connection,$_POST["id"])."'");
         //     exit;
         // }
-        elseif($_POST['action'] == "delete"){
-            $connection->query("DELETE from appointment_table where session_uid = '".mysqli_real_escape_string($connection,$session_uid)."' and id = '".mysqli_real_escape_string($connection,$_POST["id"])."'");
-            if (mysqli_affected_rows($connection) > 0) {
-                echo "1";
-            }
-            exit;
-        }
+        // elseif($_POST['action'] == "delete"){
+        //     $connection->query("DELETE from appointment_table where session_uid = '".mysqli_real_escape_string($connection,$session_uid)."' and id = '".mysqli_real_escape_string($connection,$_POST["id"])."'");
+        //     if (mysqli_affected_rows($connection) > 0) {
+        //         echo "1";
+        //     }
+        //     exit;
+        // }
     }
     
 ?>
@@ -354,31 +396,40 @@
 
             $('#submitBtn').on('click', function(e){
                 // We don't want this to act as a link so cancel the link action
-                e.preventDefault();
-                doSubmit();
+                var title = $('#title').val();
+                if(title != ""){
+                    e.preventDefault();
+                    doSubmit();
+                    alert("Successfully Inserted");
+                    window.location.href = '/Dental-Clinic/patient_appointment.php';
+                    
+                }else{
+                    alert("Please fill the Appointment Title");
+                }
+
             });
             
-            $('#deleteBtn').on('click', function(e){
-                // We don't want this to act as a link so cancel the link action
-                e.preventDefault();
-                doDelete();
-            });
+            // $('#deleteBtn').on('click', function(e){
+            //     // We don't want this to act as a link so cancel the link action
+            //     e.preventDefault();
+            //     doDelete();
+            // });
 
-            function doDelete(){
-                $("#calendarModal").modal('hide');
-                var eventID = $('#eventID').val();
-                $.ajax({
-                    url: 'patient_appointment.php',
-                    data: 'action=delete&id='+eventID,
-                    type: "POST",
-                    success: function(json) {
-                        if(json == 1)
-                            calendar.fullCalendar('removeEvents',eventID);
-                        else
-                            return false;
-                    }
-                });
-            }
+            // function doDelete(){
+            //     $("#calendarModal").modal('hide');
+            //     var eventID = $('#eventID').val();
+            //     $.ajax({
+            //         url: 'patient_appointment.php',
+            //         data: 'action=delete&id='+eventID,
+            //         type: "POST",
+            //         success: function(json) {
+            //             if(json == 1)
+            //                 calendar.fullCalendar('removeEvents',eventID);
+            //             else
+            //                 return false;
+            //         }
+            //     });
+            // }
 
             function doSubmit(){
                 $("#createAppointmentModal").modal('hide');
@@ -387,19 +438,29 @@
                 var endTime = $('#endTime').val();
                 var doctorName = $('#doctor-name').val();
                 
-                $.ajax({
-                    url: 'patient_appointment.php',
-                    data: 'action=add&title='+title+'&start='+startTime+'&end='+endTime+'&doctorName='+doctorName,
-                    type: "POST",
-                    success: function(json) {
-                        calendar.fullCalendar('renderEvent',{
-                            id: json.id,
-                            title: title,
-                            start: startTime,
-                            end: endTime,
-                        }, true);
-                    }
-                });
+                if(title != ""){
+                    $.ajax({
+                        url: 'patient_appointment.php',
+                        data: 'action=add&title='+title+'&start='+startTime+'&end='+endTime+'&doctorName='+doctorName,
+                        type: "POST",
+                        success: function(json) {
+                            if(json == 1){
+                                calendar.fullCalendar('renderEvent',{
+                                    id: json.id,
+                                    title: title,
+                                    start: startTime,
+                                    end: endTime,
+                                }, true);
+                            }
+                            else
+                                return false;
+                            
+                        }
+                    });
+                }else{
+                    alert("Please fill the Appointment Title");
+                }
+                
                 
             }
         });

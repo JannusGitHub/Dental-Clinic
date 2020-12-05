@@ -86,7 +86,7 @@
 
         <!-- Table starts -->
         <div class="container-fluid mt-4">
-            <table class="table table-hover table-responsive" id="patientAppointmentTable">
+            <table class="table table-hover" id="patientAppointmentTable">
                 <thead class="table-head">
                     <tr>
                         <th>Action</th>
@@ -260,6 +260,8 @@
         $('#end-time').attr('disabled', true);
         $('#patient-name').attr('disabled', true);
         $('#mobile-number').attr('disabled', true);
+        var patientMobileNumber = $('#mobile-number').val();
+        var status = $('#status').val();
         $('#patientAppointmentModal').modal('show');
         // var rowID = $('#editRowID').val();
         $.ajax({
@@ -268,6 +270,8 @@
             dataType: 'json',
             data: {
                 key: 'getRowData',
+                patientMobileNumber: patientMobileNumber,
+                status: status,
                 rowID: rowID
             },
             success: function(data){

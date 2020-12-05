@@ -9,9 +9,9 @@
     $session_uid = $_SESSION['user'];  // set session user to session_uid  
     $datetime_string = date('c',time()); 
 
-    $patientName = $_SESSION['nickname'];
-    $patientMobileNumber = $_SESSION['patientMobileNumber'];
-    $status = 'Pending'; //default values of Status
+    // $patientName = $_SESSION['nickname'];
+    // $patientMobileNumber = $_SESSION['patientMobileNumber'];
+    // $status = 'Pending'; //default values of Status
 
     $data = array();
     $start = $connection->real_escape_string($_GET["start"]);

@@ -116,12 +116,59 @@ if(isset($_POST['key'])){
         // $startTime = $connection->real_escape_string($_POST['startTime']);
         // $endTime = $connection->real_escape_string($_POST['endTime']);
         // $patientName = $connection->real_escape_string($_POST['patientName']);
-        // $mobileNumber = $connection->real_escape_string($_POST['mobileNumber']);
         $status = $connection->real_escape_string($_POST['status']);
+        // $patientMobileNumber = $connection->real_escape_string($_POST['patientMobileNumber']);
         $rowID = $connection->real_escape_string($_POST['rowID']);
         if($status){
             $connection->query("UPDATE appointment_table SET status ='$status' WHERE id='$rowID'");
-                exit('Successfully Updated');
+            exit('Successfully Updated');
+
+
+                //##########################################################################
+                // ITEXMO SEND SMS API - PHP - CURL-LESS METHOD
+                // Visit www.itexmo.com/developers.php for more info about this API
+                // function itexmo($number,$message,$apicode,$passwd){
+                //     $url = 'https://www.itexmo.com/php_api/api.php';
+                //     $itexmo = array('1' => $number, '2' => $message, '3' => $apicode, 'passwd' => $passwd);
+                //     $param = array(
+                //         'http' => array(
+                //             'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                //             'method'  => 'POST',
+                //             'content' => http_build_query($itexmo),
+                //         ),
+                //     );
+                //     $context  = stream_context_create($param);
+                //     return file_get_contents($url, false, $context);
+                // }
+                // //##########################################################################
+
+                // // $title = $_POST["title"];
+                // // $message = 'We would like to remind you that your requested appointment has been ' . $status . ' on ' . date('H:i',strtotime($_POST["startTime"])) . ' to '. date('H:i m-d-Y',strtotime($_POST["endTime"])) ."\r\n" . 
+                // // "We are wait for you at Mapolon Dental Clinic" . "\r\n";
+
+                // if($status == 'Appointment Approved'){
+                //     $message = 'We would like to remind you that your requested appointment has been Approved' . "\r\n";
+                // }else{
+                //     $message = 'We would like to remind you that your requested appointment has been Disapproved' . "\r\n";
+                // }
+                
+
+                // $number = '09287285612';
+                // $apiCode = 'TR-JANNU285612_6ADWX';
+                // $apiPassword = '1ewf&&y85[';
+
+                // $result = itexmo($number, $message, $apiCode, $apiPassword);
+                // if ($result == ""){
+                //     echo "iTexMo: No response from server!!!
+                //     Please check the METHOD used (CURL or CURL-LESS). If you are using CURL then try CURL-LESS and vice versa.	
+                //     Please CONTACT US for help. ";	
+                // }else if ($result == 0){
+                //     echo 'Successfully Updated';
+                // }
+                // else{	
+                //     echo "Error Num ". $result . " was encountered!";
+                // }
+                // exit($patientMobileNumber);
         }
     }
 

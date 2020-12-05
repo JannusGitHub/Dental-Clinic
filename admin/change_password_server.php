@@ -1,12 +1,12 @@
 <?php
-require('./admin/connection.php');
-require('./includes/patient_auth_session.php');
+require('connection.php');
+require('../includes/auth_session.php');
 
 if(isset($_POST['saveBtn'])){
     $currentPassword = $_POST['currentPassword'];
     $newPassword = $_POST['newPassword'];
     $confirmPassword = $_POST['confirmPassword'];
-    $username = $_SESSION['patient_username'];
+    $username = $_SESSION['username_session'];
 
     $errorEmpty = false;
     $errorPassword = false;
@@ -20,7 +20,7 @@ if(isset($_POST['saveBtn'])){
         $errorPassword = true;
     }
     else{
-        $sql = "SELECT * FROM patient_table WHERE username = '".$username."'";
+        $sql = "SELECT * FROM user_table WHERE username = '".$username."'";
         $result = $connection->query($sql);
         $row = mysqli_fetch_object($result);
 
@@ -29,15 +29,15 @@ if(isset($_POST['saveBtn'])){
         // echo '<br>';
         // echo $row->password;
 
-        //if currentPassword input is equal to the old password
+        //if currentPassword input is equal to old password
         if(md5($currentPassword) == $row->password){
             if(strlen(trim($newPassword)) < 8){
                 echo "<span class='form-error'>Password must have atleast 8 characters</span>";
                 $errorPassword = true;
             }else{
-                $connection->query("UPDATE patient_table SET password ='".md5($newPassword)."' WHERE username = '". $username ."'");
+                $connection->query("UPDATE user_table SET password ='".md5($newPassword)."' WHERE username = '". $username ."'");
                 echo "<script>alert('Password Successfully Changed');</script>";
-                echo ("<script>window.location.href='patient_logout.php'</script>");
+                echo ("<script>window.location.href='../logout.php'</script>");
             }
         }else{
             echo "<span class='form-error'>Wrong Current Password! Please try again.</span>";
@@ -50,8 +50,8 @@ if(isset($_POST['saveBtn'])){
 }else{
     echo "<span class='form-error'>Ooops! There was an error!</span>";
 }
-
 ?>
+
 
 <script>
     $('#current-password, #new-password, #confirm-password').removeClass("input-error");

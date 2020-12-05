@@ -2,11 +2,12 @@
         <header class="header">
             <nav class="site-navbar">
                 <ul class="navbar-nav">
+                <div class="logo" style="width: 140px; margin: 0.3rem auto; 0.5rem"><img src="./img/Mapolon-Logo-White.png" alt="Mapolon Logo"></div>
                     <li class="nav-item">
                         <a class="nav-link" href="/Dental-Clinic/patient_dashboard.php">&nbsp;<i class="fas fa-tachometer-alt icon"></i><span class="link-text">Dashboard</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Dental-Clinic/patient_appointment.php">&nbsp;<i class="fas fa-calendar-check icon"></i><span class="link-text">Appointment Management&nbsp;&nbsp;<i class="fas fa-caret-down"></i></span></a>
+                        <a class="nav-link" href="/Dental-Clinic/patient_appointment.php">&nbsp;<i class="fas fa-calendar-check icon"></i><span class="link-text">&nbsp;Appointment Management&nbsp;&nbsp;<i class="fas fa-caret-down"></i></span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/Dental-Clinic/patient_profile.php">&nbsp;<i class="fas fa-user icon"></i><span class="link-text">&nbsp;Profile Management</span></a>

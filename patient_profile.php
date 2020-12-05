@@ -9,7 +9,7 @@
     $session_uid = $_SESSION['user'];  // set session user to session_uid  
 
 
-    $username = $_SESSION['username'];
+    $username = $_SESSION['patient_username'];
 
     //fetch data from the database of patient table and pass the value inside the select tag
     $patientQuery = "SELECT * FROM patient_table WHERE username = '$username'";

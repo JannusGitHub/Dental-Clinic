@@ -24,7 +24,6 @@
     $datetime_string = date('c',time()); 
 
     $user_id = $_SESSION['user_id'];
-    
     $patientName = $_SESSION['nickname'];
     $patientMobileNumber = $_SESSION['patientMobileNumber'];
     $status = 'Pending'; //default values of Status
@@ -68,7 +67,8 @@
                 (SELECT id FROM patient_table WHERE nickname = '$patientName')
                 )");
             header('Content-Type: application/json');
-            echo '{"id":"'.mysqli_insert_id($connection).'"}';
+            // echo '{"id":"'.mysqli_insert_id($connection).'"}';
+            echo "1";
             exit;
         }
         // elseif($_POST['action'] == "update"){
@@ -370,9 +370,15 @@
             });
 
             $('#submitBtn').on('click', function(e){
-                // We don't want this to act as a link so cancel the link action
-                e.preventDefault();
-                doSubmit();
+                var title = $('#title').val();
+
+                if(title != ""){
+                    e.preventDefault();
+                    doSubmit();
+                    alert("Successfully Inserted");
+                }else{
+                    alert("Please fill the Appointment Title");
+                }
             });
             
             $('#deleteBtn').on('click', function(e){
@@ -394,6 +400,7 @@
                             // $(location).attr('href',url);
                             calendar.fullCalendar('removeEvents',eventID);
                             window.location.href = '/Dental-Clinic/admin/patient_appointment.php';
+                            
                         }
                         else
                             return false;
@@ -413,12 +420,18 @@
                     data: 'action=add&title='+title+'&start='+startTime+'&end='+endTime+'&doctorName='+doctorName,
                     type: "POST",
                     success: function(json) {
-                        calendar.fullCalendar('renderEvent',{
-                            id: json.id,
-                            title: title,
-                            start: startTime,
-                            end: endTime,
-                        }, true);
+
+                        if(json == 1){
+                            calendar.fullCalendar('renderEvent',{
+                                id: json.id,
+                                title: title,
+                                start: startTime,
+                                end: endTime,
+                            }, true);
+                        }
+                        else{
+                            return false;
+                        }
                     }
                 });
                 

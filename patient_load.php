@@ -2,6 +2,20 @@
     require('./admin/connection.php');
     require('./includes/patient_auth_session.php');
 
+    // session_start();
+    // if($_SESSION['patient_status'] == 'invalid' || empty($_SESSION['status'])){
+    //     //set status to invalid
+    //     $_SESSION['status'] = 'invalid';
+    //     // header("Location: ../login.php");
+    //     // echo ("<script>window.location.href='/Dental-Clinic/login.php</script>");
+    // }
+        // else{
+    //     echo ("<script>window.location.href='/Dental-Clinic/admin/index.php</script>");
+    // }
+    // if($_SESSION['patient_status'] == 'valid'){
+    //     echo ("<script>window.location.href='/Dental-Clinic/admin/index.php</script>");
+    // }
+
     if(!isset($_SESSION['user']))
     {
         $_SESSION['user'] = session_id(); //generate current session_id for the current user
@@ -10,8 +24,8 @@
     $datetime_string = date('c',time()); 
 
     // $patientName = $_SESSION['nickname'];
-    $patientMobileNumber = $_SESSION['patientMobileNumber'];
-    $status = 'Pending'; //default values of Status
+    // $patientMobileNumber = $_SESSION['patientMobileNumber'];
+    // $status = 'Pending'; //default values of Status
 
     $data = array();
     $start = $connection->real_escape_string($_GET["start"]);

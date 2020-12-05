@@ -20,7 +20,7 @@ require('./admin/connection.php');
 
     <div class="login-form">
         <form id="patientLoginForm" method="POST">
-            <div class="text-center"><i class="fas fa-users icon"></i></div>
+        <div class="logo" style="width: 130px; margin: 0 auto 0.8rem;"><img src="./img/Mapolon-Logo-White.png" alt="Mapolon Logo"></div>
             <h2 class="text-center">Patient Login</h2>
             <p class="form-message text-center"></p>
             <div class="form-group">
@@ -84,7 +84,7 @@ require('./admin/connection.php');
         transform: translate(-50%, -50%);
     }
     .login-form h2 {
-        margin: 10px 0 25px;
+        margin: 5px 0;
         color: #fff;
     }
     .login-form form {
@@ -95,7 +95,7 @@ require('./admin/connection.php');
         background: #fff;
         background: linear-gradient(#00c6ff, #0072ff);
         box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-        padding: 30px 30px 0;
+        padding: 15px 30px 0;
     }
     .login-form .btn {        
         font-size: 16px;
