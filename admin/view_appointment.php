@@ -260,7 +260,6 @@
         $('#end-time').attr('disabled', true);
         $('#patient-name').attr('disabled', true);
         $('#mobile-number').attr('disabled', true);
-        var patientMobileNumber = $('#mobile-number').val();
         var status = $('#status').val();
         $('#patientAppointmentModal').modal('show');
         // var rowID = $('#editRowID').val();
@@ -270,7 +269,6 @@
             dataType: 'json',
             data: {
                 key: 'getRowData',
-                patientMobileNumber: patientMobileNumber,
                 status: status,
                 rowID: rowID
             },
@@ -285,6 +283,7 @@
                 $('#mobile-number').val(data.mobileNumber);
                 $('#status').val(data.status);
 
+                var mobileNumber = $('#mobile-number').val(data.mobileNumber);
                 //change the modal-header BG, modal-title text color, modal-title text & the saveBtn onclick to update
                 $(".modal-header").css( "background", "linear-gradient(#00c6ff, #0072ff)");
                 $(".modal-title").css( "color", "white" );
@@ -297,12 +296,6 @@
                         $('#patientModal').modal('hide');
                     }, 400);
                 });
-
-                
-
-                
-
-
             }
         });
         

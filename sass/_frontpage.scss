@@ -1,0 +1,39 @@
+.navbar {
+    .navbar-brand{
+        font-family: Poppins;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 1.2rem;
+        letter-spacing: 0.2px;
+        color: #3BCDFF;
+    }
+
+    .navbar-brand:hover{
+        color: #3BCDFF;
+    }
+}
+
+.navbar .nav-link{
+    padding: 0 0.9375rem !important;
+    font-family: 'Poppins';
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.login{
+    color: #3BCDFF;
+}
+
+
+/*============SERVICES STYLING=============*/
+.services-area .services .img-area img{
+    max-width: 100%;
+    width: 100px;
+    height: auto;
+}
+
+
+/*============CONTACT STYLING=============*/
+.contact-area{
+    margin-top: 100px;
+}

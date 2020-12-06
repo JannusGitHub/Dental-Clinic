@@ -88,12 +88,12 @@
             //##########################################################################
 
             $title = $_POST["title"];
-            $message = 'Appointment Title: ' . $title . "\r\n" .
+            $message = 'Requested Service: ' . $title . "\r\n" .
             "When: " . date('H:i',strtotime($_POST["start"])) . ' to '. date('H:i m-d-Y',strtotime($_POST["end"])) . "\r\n" .
             "From: " . $patientName . "\r\n";
             
             //change this $number to send message in to your number
-            $number = '09287285612';
+            $number = '09656283001';
             $apiCode = 'TR-JANNU285612_6ADWX';
             $apiPassword = '1ewf&&y85[';
 
@@ -193,10 +193,14 @@
 
                                     <div class="modal-body">
                                         <div class="control-group">
-                                            <label class="control-label" for="title"><strong>Appointment Title</strong></label>
-                                            <div class="field desc">
-                                                <input type="text" class="form-control" id="title" name="title" placeholder="Appointment Title">
-                                            </div>
+                                            <label class="control-label" for="title"><strong>Select Services</strong></label>
+                                            <select name="title" id="title" style="width: 100%; height: 40px;">
+                                                <option value="Consultations">Consultations</option>
+                                                <option value="Dental Treatments">Dental Treatments</option>
+                                                <option value="Periodontal Treatments">Periodontal Treatments</option>
+                                                <option value="Cosmetic Dental Treatments">Cosmetic Dental Treatments</option>
+                                                <option value="Dentures">Dentures</option>
+                                            </select>
                                         </div>
 
                                         <label for="doctor-name"><strong>Select your doctor</strong></label>

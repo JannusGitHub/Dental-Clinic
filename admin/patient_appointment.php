@@ -145,10 +145,15 @@
 
                                     <div class="modal-body">
                                         <div class="form-group">
-                                            <label class="control-label" for="title"><strong>Appointment Title</strong></label>
-                                            <div class="field desc">
-                                                <input type="text" class="form-control" id="title" name="title" placeholder="Appointment Title">
-                                            </div>
+                                            <label class="control-label" for="title"><strong>Select Services</strong></label>
+                                            <select name="title" id="title" style="width: 100%; height: 40px;">
+                                                <option value="Consultations">Consultations</option>
+                                                <option value="Dental Treatments">Dental Treatments</option>
+                                                <option value="Periodontal Treatments">Periodontal Treatments</option>
+                                                <option value="Cosmetic Dental Treatments">Cosmetic Dental Treatments</option>
+                                                <option value="Dentures">Dentures</option>
+                                            </select>
+                                                <!-- <input type="text" class="form-control" id="title" name="title" placeholder="Appointment Title"> -->
                                         </div>
 
 

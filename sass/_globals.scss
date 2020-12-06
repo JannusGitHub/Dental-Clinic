@@ -50,6 +50,33 @@ img {
     height: auto;
 }
 
+
+/*===========SECTION STYLING===========*/
+.section-padding{
+    padding: 3.75rem 0; /*60px*/
+}
+
+.section-title {
+    text-align: center;
+    margin: 0 auto;
+    padding-bottom: 3.75rem; /*60px*/
+}
+.section-title h2 {
+    font-size: 3.125rem; /*50px*/
+    font-weight: bold;
+    color: #262626;
+    letter-spacing: 10px;
+    font-family: 'Lobster', cursive;
+}
+
+.section-title h2::after {
+    content: "";
+    border-bottom: 2px solid #262626;
+    display: block;
+    width: 50%;
+    margin: 0.625rem auto; /*10px*/
+}
+
 .button{
     border: none;
     height: auto;
