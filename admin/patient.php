@@ -81,6 +81,7 @@
                         <th>Gender</th>
                         <th>Nickname</th>
                         <th>Occupation</th>
+                        <th>Created At</th>
                     </tr>
                 </thead>
 
@@ -99,6 +100,7 @@
 <?php
     include('../includes/footer.php');
 ?>
+
 
 <script>
     $(document).ready(function() {
@@ -121,7 +123,6 @@
             $(".modal-title").text("Add Patient");
             $('#patientModal').modal('show');	    
         });
-
     });
 
 

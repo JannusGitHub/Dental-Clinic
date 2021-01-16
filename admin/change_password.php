@@ -12,7 +12,7 @@
             <div class="container m-2">
                 <div class="row border-left" style="border-width: 3px !important;">
                     <div class="col-7">
-                        <h4>Change Password</h4>
+                        <h3>Change Password</h3>
                         <p class="d-flex align-items-center mb-0"><i class="fas fa-info-circle fa-2x icon align-items-center"></i>&nbsp;Note: </p>
                         <p class="mb-4">After the submission of this form, you will be directed to the login page to ensure that all your Session is updated.</p>
                         <p class="form-message text-left"></p>

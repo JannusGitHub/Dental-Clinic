@@ -54,6 +54,7 @@ if(isset($_POST['key'])){
                         <td>'.$row["gender"].'</td>
                         <td>'.$row["nickname"].'</td>       
                         <td>'.$row["occupation"].'</td>
+                        <td>'.$row["created_at"].'</td>
                     </tr>
                 ';
             }
@@ -91,6 +92,7 @@ if(isset($_POST['key'])){
         $gender = $connection->real_escape_string($_POST['gender']);
         $nickname = $connection->real_escape_string($_POST['nickname']);
         $occupation = $connection->real_escape_string($_POST['occupation']);
+        $createdAt = date("Y-m-d H:i:s");
 
         if(isNotEmpty($username) && isNotEmpty($password) && isNotEmpty($birthday)
         && isNotEmpty($age) && isNotEmpty($mobileNumber) && isNotEmpty($fullAddress) 

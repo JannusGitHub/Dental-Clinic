@@ -34,10 +34,10 @@ if(isset($_POST['key'])){
     //view/refresh data when new record has been saved
     if($_POST['key'] == 'viewData'){
 
-        $result = $connection->query("SELECT patient_bill_table.id, patient_bill_table.bill_date, patient_bill_table.bill_type, patient_bill_table.payment_mode, patient_bill_table.amount_charge, patient_bill_table.amount_paid, patient_bill_table.balance 
+        $result = $connection->query("SELECT patient_table.nickname, patient_bill_table.id, patient_bill_table.bill_date, patient_bill_table.bill_type, patient_bill_table.payment_mode, patient_bill_table.amount_charge, patient_bill_table.amount_paid, patient_bill_table.balance 
         FROM patient_bill_table 
         LEFT JOIN patient_table ON patient_table.id = patient_bill_table.patient_id
-        ORDER BY patient_bill_table.id ASC");
+        ORDER BY patient_bill_table.id DESC");
         if ($result->num_rows > 0){
             $data = "";
             // output data of each row
@@ -48,7 +48,7 @@ if(isset($_POST['key'])){
                             <button class="btn button mr-1" onclick="edit('.$row["id"].')" id="edit'.$row["id"].'" value="Edit"><i class="fas fa-edit"></i></button>
                             <button class="btn btn-danger" onclick="deleteRow('.$row["id"].')" id="delete'.$row["id"].'" ><i class="fas fa-trash-alt"></i></button>
                         </td>
-                        <td>'.$row["id"].'</td>
+                        <td>'.$row["nickname"].'</td>
                         <td id="bill_date'.$row["id"].'">'.$row["bill_date"].'</td>
                         <td>'.$row["bill_type"].'</td>
                         <td>'.$row["payment_mode"].'</td>

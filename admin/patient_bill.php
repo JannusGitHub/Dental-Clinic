@@ -80,7 +80,7 @@
                 <thead class="table-head">
                     <tr>
                         <th>Action</th>
-                        <th>ID</th>
+                        <th>Patient Name</th>
                         <th>Bill Date</th>
                         <th>Bill Type</th>
                         <th>Payment Mode</th>
