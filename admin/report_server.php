@@ -8,6 +8,7 @@ if(isset($_POST["fromDate"], $_POST["toDate"])){
     $query = "
         SELECT * FROM patient_table
         WHERE created_at BETWEEN '" .$_POST["fromDate"]. "' AND '" .$_POST["toDate"]. "'
+        ORDER BY id ASC
     ";
     $result = mysqli_query($connection, $query);
     $output .= '

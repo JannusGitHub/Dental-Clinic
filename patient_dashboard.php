@@ -7,6 +7,28 @@
     $appointmentQuery = "SELECT COUNT(1) FROM appointment_table WHERE patient_id = (SELECT id FROM patient_table WHERE nickname = '$patientName')";
     $appointmentResult = $connection->query($appointmentQuery);
     $totalAppointment = $appointmentResult->fetch_array();
+
+
+    $patientAppointmentQuery = "SELECT start_time AS start_time FROM appointment_table 
+    WHERE patient_id = (SELECT id FROM patient_table WHERE nickname = '$patientName')";
+    
+    $patientAppointmentResult = mysqli_query($connection, $patientAppointmentQuery);
+
+    $patientAppointmentRow = mysqli_fetch_assoc($patientAppointmentResult);
+    
+    mysqli_free_result($patientAppointmentResult);
+    // $patientAppointment = $patientAppointmentRow['start_time']; //don't use isset on this
+
+    //Solved using if else then use isset
+    if($patientAppointmentRow > 0){
+        $appointment = date('F j, Y, g:i A', strtotime($patientAppointmentRow['start_time']));
+    }else{
+
+        $appointment = date('F j, Y, g:i A', strtotime(isset($patientAppointmentRow['start_time']))); //error on this, fix it tomorrow
+    }
+
+    
+    mysqli_close($connection);
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +51,13 @@
     <main>
         <div class="container-fluid">
             <h2 class="mt-1">Dashboard</h2>
-            <p class="mb-4">Hi, welcome to Mapolon Dental Clinic</p>
+            
+            <?php if($patientAppointmentRow > 0){?>
+
+                <p class="mb-4">You have an Appointment on: <b><?php echo $appointment;?></b>. See you there!</p>
+            <?php
+            }else{?>
+            <p class="mb-4">You don't have an Appointment yet.</p><?php }; ?>
             <div class="row mb-3">
                 <div class="col-xl-4 col-lg-4 col-sm-6 py-2">
                     <div class="card text-white h-100">

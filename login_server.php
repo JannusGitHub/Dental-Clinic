@@ -41,7 +41,18 @@
                             // $userRole = $row['user_role'];
                             // echo ("<script>alert('$userRole');</script>");
                             echo ("<script>window.location.href='/Dental-Clinic/admin/index.php'</script>");
-                        }else{
+                        }else if($row['user_role'] == 'dentist'){
+                            $_SESSION['status'] = 'valid';
+                            $_SESSION['username_session'] = $row['username'];
+                            $_SESSION['user_id'] = $row['id'];
+                            
+                            // $username = $_SESSION['username_session'];
+                            // echo "<script>alert('$username')</script>";
+                            // $userRole = $row['user_role'];
+                            // echo ("<script>alert('$userRole');</script>");
+                            echo ("<script>window.location.href='/Dental-Clinic/admin/index.php'</script>");
+                        }
+                        else{
                             $_SESSION['status'] = 'invalid';
                         }
                     }

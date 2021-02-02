@@ -8,14 +8,14 @@
     $page = 'report';
 
 
-    $query = "SELECT * FROM patient_table ORDER BY id desc";  
+    $query = "SELECT * FROM patient_table ORDER BY id asc";  
     $result = mysqli_query($connection, $query); 
 ?>
 
 
     <main>
         <div class="container">
-            <h2 class="mt-1">Reports</h2>
+            <h2 class="mt-1">Patient Reports</h2>
             <br>
             <div class="row">
                 <div class="col-lg-3 col-md-4">
@@ -76,7 +76,9 @@
 <script>
     $(document).ready(function() {
 
-        $('.table').DataTable();
+        $('.table').DataTable({
+            "searching": false
+        });
         
         $('#search').click(function(){
             $('.table').DataTable();
